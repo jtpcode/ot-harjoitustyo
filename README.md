@@ -3,4 +3,6 @@ This **repository** will include instruction to *install* and *run* the project 
 
 [Laskarit](https://github.com/jtpcode/ot-harjoitustyo/tree/main/laskarit)
 
-[Requirements specification](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/requirements_specification.md)
+[Vaatimusmäärittely](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/requirements_specification.md)
+
+[Tuntikirjanpito](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/hourly_accounting.md)
