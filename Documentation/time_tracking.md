@@ -1,4 +1,4 @@
-# Hourly accounting
+# Time tracking
 
 | date  | time | task  |
 | :----:|:-----| :-----|
