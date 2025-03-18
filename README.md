@@ -5,4 +5,4 @@ This **repository** will include instruction to *install* and *run* the project 
 
 [Vaatimusmäärittely](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/requirements_specification.md)
 
-[Tuntikirjanpito](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/hourly_accounting.md)
+[Tuntikirjanpito](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/time_tracking.md)
