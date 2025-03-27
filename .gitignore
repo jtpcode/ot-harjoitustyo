@@ -176,3 +176,5 @@ cython_debug/
 # Other
 .pytest_cache
 pytest.ini
+*.db
+testi.py

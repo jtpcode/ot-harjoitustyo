@@ -20,6 +20,7 @@ class LoginView:
         self._username_entry = None
         self._password_entry = None
 
+        root.geometry("400x300")
         self._initialize()
 
     def pack(self):
