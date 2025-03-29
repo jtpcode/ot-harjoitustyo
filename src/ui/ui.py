@@ -2,10 +2,10 @@ from ui.login_view import LoginView
 
 
 class UI:
-    """Class responsible for the graphical user interface of the application."""
+    """Class for the graphical user interface of the application."""
 
     def __init__(self, root):
-        """Class constructor. Creates a new class responsible for the user interface.
+        """Class constructor. Creates a new class for the user interface.
 
         Args:
             root:
@@ -24,15 +24,11 @@ class UI:
 
         self._current_view = None
 
-    def _handle_login(self):
-        return None
-
     def _show_login_view(self):
         self._hide_current_view()
 
         self._current_view = LoginView(
-            self._root,
-            self._handle_login
+            self._root
         )
 
         self._current_view.pack()
