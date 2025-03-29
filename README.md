@@ -1,8 +1,54 @@
 # Ohjelmistotekniikka, harjoitustyö
-This **repository** will include instruction to *install* and *run* the project work of this course.
 
-[Laskarit](https://github.com/jtpcode/ot-harjoitustyo/tree/main/laskarit)
+## Note on Python Version
 
-[Vaatimusmäärittely](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/requirements_specification.md)
+The application's functionality has been tested with Python version `3.13`. Issues may arise, when using older Python versions.
 
-[Tuntikirjanpito](https://github.com/jtpcode/ot-harjoitustyo/blob/main/Documentation/time_tracking.md)
+## Documentation
+
+- [Requirements Specification](./Documentation/requirements_specification.md)
+- [Work Time Log](./Documentation/time_tracking.md)
+- [Changelog](./Documentation/changelog.md)
+
+## Installation
+
+1. Install dependencies with the following command:
+
+```bash
+poetry install
+```
+
+2. Start the application with:
+
+```bash
+poetry run invoke start
+```
+
+## Command Line Functions
+
+### Running the Application
+
+The application can be started with:
+
+```bash
+poetry run invoke start
+```
+
+### Testing
+
+Tests can be run with the following command:
+
+```bash
+poetry run invoke test
+```
+
+### Test Coverage
+
+A test coverage report can be generated with:
+
+```bash
+poetry run invoke coverage-report
+```
+
+The report will be generated in the *htmlcov* directory.
+
