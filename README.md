@@ -20,7 +20,13 @@ The application's functionality has been tested with Python version `3.13`. Issu
 poetry install
 ```
 
-2. Start the application with:
+2. Initialize the database with:
+
+```bash
+poetry run python3 src/initialize_database.py
+```
+
+3. Start the application with:
 
 ```bash
 poetry run invoke start
