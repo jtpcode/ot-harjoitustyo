@@ -23,18 +23,18 @@ class LoginView:
         self._new_username_entry = None
         self._new_password_entry = None
 
-        # Center window in the screen
-        height = 500
-        width = 500
-        x = (self._root.winfo_screenwidth() // 2) - (width // 2)
-        y = (self._root.winfo_screenheight() // 2) - (height // 2)
-        self._root.geometry(f'{width}x{height}+{x}+{y}')
+        # Center the window
+        self._height = 500
+        self._width = 500
+        x = (self._root.winfo_screenwidth() // 2) - (self._width // 2)
+        y = (self._root.winfo_screenheight() // 2) - (self._height // 2)
+        self._root.geometry(f'{self._width}x{self._height}+{x}+{y}')
 
         self._initialize()
 
     def pack(self):
         """Show current view."""
-        self._frame.pack(fill=constants.X)
+        self._frame.place(relx=0.5, rely=0.5, anchor="center")
 
     def destroy(self):
         """Destroy current view."""
@@ -58,33 +58,32 @@ class LoginView:
         username_label = ttk.Label(master=self._frame, text="Username")
         self._username_entry = ttk.Entry(master=self._frame, width=30)
 
-        username_label.grid(padx=10, pady=5, sticky=constants.W)
-        self._username_entry.grid(padx=10, pady=5, sticky=constants.W)
+        username_label.pack()
+        self._username_entry.pack()
 
     def _initialize_password(self):
         password_label = ttk.Label(master=self._frame, text="Password")
         self._password_entry = ttk.Entry(master=self._frame, width=30)
 
-        password_label.grid(padx=10, pady=5, sticky=constants.W)
-        self._password_entry.grid(padx=10, pady=5, sticky=constants.W)
+        password_label.pack()
+        self._password_entry.pack()
 
     def _initialize_new_username(self):
         new_username_label = ttk.Label(master=self._frame, text="Username")
         self._new_username_entry = ttk.Entry(master=self._frame, width=30)
 
-        new_username_label.grid(padx=10, pady=5, sticky=constants.W)
-        self._new_username_entry.grid(padx=10, pady=5, sticky=constants.W)
+        new_username_label.pack()
+        self._new_username_entry.pack()
 
     def _initialize_new_password(self):
         new_password_label = ttk.Label(master=self._frame, text="Password")
         self._new_password_entry = ttk.Entry(master=self._frame, width=30)
 
-        new_password_label.grid(padx=10, pady=5, sticky=constants.W)
-        self._new_password_entry.grid(padx=10, pady=5, sticky=constants.W)
+        new_password_label.pack()
+        self._new_password_entry.pack()
 
     def _initialize(self):
         self._frame = ttk.Frame(master=self._root)
-        self._frame.grid_columnconfigure(0, weight=1, minsize=350)
 
         # Login
         self._initialize_username()
@@ -94,11 +93,11 @@ class LoginView:
             text="Login",
             command=None,
             width=20)
-        login_button.grid(padx=10, pady=5, sticky=constants.W)
+        login_button.pack()
 
         # New user
         new_user_label = ttk.Label(master=self._frame, text="New user? Create credentials here:")
-        new_user_label.grid(padx=10, pady=5, sticky=constants.W)
+        new_user_label.pack()
         self._initialize_new_username()
         self._initialize_new_password()
         create_user_button = ttk.Button(
@@ -106,6 +105,6 @@ class LoginView:
             text="Create user",
             command=self._create_user_handler,
             width=20)
-        create_user_button.grid(padx=10, pady=5, sticky=constants.W)
+        create_user_button.pack()
         
     
