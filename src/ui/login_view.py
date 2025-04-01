@@ -1,27 +1,24 @@
-from tkinter import ttk, constants
-from repositories.user_repository import user_repository
-from services.magic_service import MagicService
+from tkinter import ttk
 
 
 class LoginView:
     """User interface for login."""
 
-    def __init__(self, root):
+    def __init__(self, root, show_create_user_view):
         """Class constructor. Creates a new login view.
 
         Args:
             root:
                 TKinter -element, which initializes the user interface.
-            handle_login:
-                Event handler for user login.
+            show_create_user_view:
+                Directs user to "Create new user" -view
         """
 
         self._root = root
+        self._show_create_user_view = show_create_user_view
         self._frame = None
         self._username_entry = None
         self._password_entry = None
-        self._new_username_entry = None
-        self._new_password_entry = None
 
         # Center the window
         self._height = 500
@@ -39,20 +36,6 @@ class LoginView:
     def destroy(self):
         """Destroy current view."""
         self._frame.destroy()
-
-    def _create_user_handler(self):
-        username = self._new_username_entry.get()
-        password = self._new_password_entry.get()
-        magic_service = MagicService(user_repository)
-
-        if len(username) == 0 or len(password) == 0:
-            print("Username or password is missing!")
-            return
-
-        try:
-            magic_service.create_user(username, password)
-        except:
-            print("Error in creating user!")
     
     def _initialize_username(self):
         username_label = ttk.Label(master=self._frame, text="Username")
@@ -65,27 +48,19 @@ class LoginView:
         password_label = ttk.Label(master=self._frame, text="Password")
         self._password_entry = ttk.Entry(master=self._frame, width=30)
 
-        password_label.pack()
+        password_label.pack(pady=(10, 0))
         self._password_entry.pack()
-
-    def _initialize_new_username(self):
-        new_username_label = ttk.Label(master=self._frame, text="Username")
-        self._new_username_entry = ttk.Entry(master=self._frame, width=30)
-
-        new_username_label.pack()
-        self._new_username_entry.pack()
-
-    def _initialize_new_password(self):
-        new_password_label = ttk.Label(master=self._frame, text="Password")
-        self._new_password_entry = ttk.Entry(master=self._frame, width=30)
-
-        new_password_label.pack()
-        self._new_password_entry.pack()
 
     def _initialize(self):
         self._frame = ttk.Frame(master=self._root)
 
-        # Login
+        title_label = ttk.Label(
+            master=self._frame,
+            text="Magic Archive",
+            font=("Arial", 24, "bold"),
+        )
+        title_label.pack(pady=(0, 60))
+
         self._initialize_username()
         self._initialize_password()
         login_button = ttk.Button(
@@ -93,18 +68,15 @@ class LoginView:
             text="Login",
             command=None,
             width=20)
-        login_button.pack()
-
-        # New user
-        new_user_label = ttk.Label(master=self._frame, text="New user? Create credentials here:")
-        new_user_label.pack()
-        self._initialize_new_username()
-        self._initialize_new_password()
+        login_button.pack(pady=(15, 0))
+    
+        new_user_label = ttk.Label(master=self._frame, text="New user? Create an account here:")
+        new_user_label.pack(pady=(70, 10))
         create_user_button = ttk.Button(
             master=self._frame,
             text="Create user",
-            command=self._create_user_handler,
+            command=self._show_create_user_view,
             width=20)
         create_user_button.pack()
-        
+    
     
