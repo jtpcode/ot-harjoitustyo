@@ -9,6 +9,7 @@ The application's functionality has been tested with Python version `3.13`. Issu
 ## Documentation
 
 - [Requirements Specification](./Documentation/requirements_specification.md)
+- [Architecture Description](./Documentatioin/architecture.md)
 - [Work Time Log](./Documentation/time_tracking.md)
 - [Changelog](./Documentation/changelog.md)
 
