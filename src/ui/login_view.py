@@ -36,7 +36,7 @@ class LoginView:
     def destroy(self):
         """Destroy current view."""
         self._frame.destroy()
-    
+
     def _initialize_username(self):
         username_label = ttk.Label(master=self._frame, text="Username")
         self._username_entry = ttk.Entry(master=self._frame, width=30)
@@ -69,7 +69,7 @@ class LoginView:
             command=None,
             width=20)
         login_button.pack(pady=(15, 0))
-    
+
         new_user_label = ttk.Label(master=self._frame, text="New user? Create an account here:")
         new_user_label.pack(pady=(70, 10))
         create_user_button = ttk.Button(
@@ -78,5 +78,3 @@ class LoginView:
             command=self._show_create_user_view,
             width=20)
         create_user_button.pack()
-    
-    

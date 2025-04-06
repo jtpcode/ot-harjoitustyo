@@ -82,5 +82,3 @@ class CreateUserView:
             command=self._create_user_handler,
             width=20)
         create_user_button.pack(pady=(15, 0))
-        
-    

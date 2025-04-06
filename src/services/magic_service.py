@@ -13,7 +13,7 @@ class MagicService:
 
         self._user = None
         self._user_repository = user_repository
-    
+
     def create_user(self, username, password):
         """Creates a new user
 
@@ -21,8 +21,7 @@ class MagicService:
             username: string
             password: string
         """
-        
+
         #TBA: existing user
 
         self._user_repository.create(User(username, password))
-

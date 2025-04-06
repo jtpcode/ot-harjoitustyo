@@ -23,5 +23,3 @@ class TestUserRepository(unittest.TestCase):
         self.assertEqual(len(users), 2)
         self.assertEqual(users[0].username, self.user_alfa.username)
         self.assertEqual(users[1].username, self.user_beta.username)
-        
-    

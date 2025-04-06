@@ -14,11 +14,11 @@ class UI:
         """
         self._root = root
         self._current_view = None
-    
+
     def start(self):
         """Starts the user interface."""
         self._show_login_view()
-    
+
     def _hide_current_view(self):
         if self._current_view:
             self._current_view.destroy()
@@ -34,7 +34,7 @@ class UI:
         )
 
         self._current_view.pack()
-    
+
     def _show_create_user_view(self):
         self._hide_current_view()
 
@@ -43,4 +43,3 @@ class UI:
         )
 
         self._current_view.pack()
-    

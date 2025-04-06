@@ -23,7 +23,7 @@ poetry install
 2. Initialize the database with:
 
 ```bash
-poetry run python3 src/initialize_database.py
+poetry run invoke init-db
 ```
 
 3. Start the application with:

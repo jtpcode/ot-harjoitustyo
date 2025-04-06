@@ -26,7 +26,7 @@ class UserRepository:
             cursor.execute("SELECT * FROM Users")
         except Exception as e:
             print("Error:", e)
-        
+
         rows = cursor.fetchall()
 
         return [User(row[1], row[2]) for row in rows]
