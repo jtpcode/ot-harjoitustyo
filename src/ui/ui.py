@@ -1,5 +1,6 @@
 from ui.login_view import LoginView
 from ui.create_user_view import CreateUserView
+from ui.magic_card_view import MagicCardView
 
 
 class UI:
@@ -30,7 +31,8 @@ class UI:
 
         self._current_view = LoginView(
             self._root,
-            self._show_create_user_view
+            self._show_create_user_view,
+            self._show_magic_card_view
         )
 
         self._current_view.pack()
@@ -39,6 +41,15 @@ class UI:
         self._hide_current_view()
 
         self._current_view = CreateUserView(
+            self._root
+        )
+
+        self._current_view.pack()
+
+    def _show_magic_card_view(self):
+        self._hide_current_view()
+
+        self._current_view = MagicCardView(
             self._root
         )
 

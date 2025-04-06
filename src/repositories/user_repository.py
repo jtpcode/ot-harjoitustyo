@@ -31,6 +31,30 @@ class UserRepository:
 
         return [User(row[1], row[2]) for row in rows]
 
+    def find_by_username(self, username):
+        """Returns a specific user.
+
+        Returns:
+            A User -object
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT * FROM Users WHERE username = ?", 
+                (username,)
+            )
+        except Exception as e:
+            print("Error:", e)
+
+        row = cursor.fetchone()
+
+        if row:
+            return User(row[1], row[2])
+        return None
+
+
     def create(self, user):
         """Save new user into database
 
