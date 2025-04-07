@@ -11,7 +11,7 @@ class InvalidPasswordError(Exception):
 class MagicService:
     """Class responsible for application logic."""
 
-    def __init__(self, user_repository):
+    def __init__(self, user_repository = None):
         """Class constructor. Creates a new services for the application logic.
 
         Args:
@@ -52,3 +52,10 @@ class MagicService:
             raise InvalidUsernameError("Invalid username")
         if user.password != password:
             raise InvalidPasswordError("Invalid password")
+
+        self._user = user
+
+    def logout(self):
+        """Logout current user.
+        """
+        self._user = None
