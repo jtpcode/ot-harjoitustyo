@@ -7,6 +7,9 @@ class InvalidUsernameError(Exception):
 class InvalidPasswordError(Exception):
     pass
 
+class UsernameExistsError(Exception):
+    pass
+
 
 class MagicService:
     """Class responsible for application logic."""
@@ -29,7 +32,8 @@ class MagicService:
             password: string
         """
 
-        #TBA: existing user
+        if self._user_repository.find_by_username(username):
+            raise UsernameExistsError(f"Username {username} exists already")
 
         self._user_repository.create(User(username, password))
 

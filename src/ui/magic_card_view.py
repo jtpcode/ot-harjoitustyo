@@ -10,6 +10,8 @@ class MagicCardView:
         Args:
             root:
                 TKinter -element, which initializes the user interface.
+            show_login_view:
+                Direct user to login view
         """
 
         self._root = root

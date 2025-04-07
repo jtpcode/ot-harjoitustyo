@@ -6,4 +6,5 @@
 | 28.3. | 4    | TKinter study, database connection with user repository |
 | 29.3. | 5    | Create user -button functionality, first unittest |
 | 1.4. | 2    | Separate login/create user views, UI-tweaks and one additional test |
-
+| 6.4. | 4    | Enable login (direct user to "card management" view), add login error messages, pylint, documentation |
+| 7.4. | 3    | Enable logout (direct user back to "login" view), add error messages to account creation |
