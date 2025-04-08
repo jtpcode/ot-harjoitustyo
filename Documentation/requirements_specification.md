@@ -43,3 +43,5 @@ The basic version of the application could be expanded with the following featur
 - Clicking a card to view a larger image.
 - Adding more advanced filtering options.
 - Storing and managing prebuilt decks.
+- Show card resale prices
+- Show total count of each individual card

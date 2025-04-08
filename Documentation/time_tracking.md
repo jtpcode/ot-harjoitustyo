@@ -8,3 +8,6 @@
 | 1.4. | 2    | Separate login/create user views, UI-tweaks and one additional test |
 | 6.4. | 4    | Enable login (direct user to "card management" view), add login error messages, pylint, documentation |
 | 7.4. | 3    | Enable logout (direct user back to "login" view), add error messages to account creation |
+| 8.4. | 4    | New tests for UserRepository and MagicService, autopep8 |
+
+**Total hours: 25**

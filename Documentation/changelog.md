@@ -14,8 +14,10 @@
 
 - User can login and logout
 - Error message is shown if login credentials are not correct
-- Successfull account creation directs user to "card management" view
 - Error message is shown if username already exists when creating a new account
+- Successfull account creation directs user to "login" view
 - Successfull login directs user to "card management" view
 - User can see the "card management" view
 - Logout directs user to "login" view
+- UserRepository tested for "find by username"
+- MagicService tested for "login" and "create user"
