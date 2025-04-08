@@ -1,6 +1,7 @@
 from tkinter import ttk, StringVar, constants
 from services.magic_service import MagicService
 
+
 class MagicCardView:
     """User interface for managing Magic the Gathering cards."""
 
@@ -34,7 +35,7 @@ class MagicCardView:
     def destroy(self):
         """Destroy current view."""
         self._frame.destroy()
-    
+
     def _logout_handler(self):
         magic_service = MagicService()
         magic_service.logout()

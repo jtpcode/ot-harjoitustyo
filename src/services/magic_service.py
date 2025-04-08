@@ -4,8 +4,10 @@ from entities.user import User
 class InvalidUsernameError(Exception):
     pass
 
+
 class InvalidPasswordError(Exception):
     pass
+
 
 class UsernameExistsError(Exception):
     pass
@@ -14,7 +16,7 @@ class UsernameExistsError(Exception):
 class MagicService:
     """Class responsible for application logic."""
 
-    def __init__(self, user_repository = None):
+    def __init__(self, user_repository=None):
         """Class constructor. Creates a new services for the application logic.
 
         Args:

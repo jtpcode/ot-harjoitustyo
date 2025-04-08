@@ -1,6 +1,7 @@
 from database_connection import get_database_connection
 from entities.user import User
 
+
 class UserRepository:
     """Class responsible for user database actions"""
 
@@ -42,7 +43,7 @@ class UserRepository:
 
         try:
             cursor.execute(
-                "SELECT * FROM Users WHERE username = ?", 
+                "SELECT * FROM Users WHERE username = ?",
                 (username,)
             )
         except Exception as e:
@@ -53,7 +54,6 @@ class UserRepository:
         if row:
             return User(row[1], row[2])
         return None
-
 
     def create(self, user):
         """Save new user into database
@@ -76,5 +76,6 @@ class UserRepository:
             print("Error:", e)
 
         self._connection.commit()
+
 
 user_repository = UserRepository(get_database_connection())

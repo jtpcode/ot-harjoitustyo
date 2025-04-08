@@ -59,7 +59,7 @@ class CreateUserView:
             self._show_login_view()
         except UsernameExistsError as e:
             self._show_error(str(e))
-    
+
     def _show_error(self, message):
         self._error_variable.set(message)
         self._error_label.pack()

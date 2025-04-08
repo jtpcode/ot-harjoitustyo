@@ -101,7 +101,8 @@ class LoginView:
         )
         self._error_label.pack(pady=(5, 0))
 
-        new_user_label = ttk.Label(master=self._frame, text="New user? Create an account here:")
+        new_user_label = ttk.Label(
+            master=self._frame, text="New user? Create an account here:")
         new_user_label.pack(pady=(70, 10))
         create_user_button = ttk.Button(
             master=self._frame,
