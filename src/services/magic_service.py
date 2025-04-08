@@ -32,12 +32,19 @@ class MagicService:
         Args:
             username: string
             password: string
+        Returns:
+            Created User -object
+        Raises:
+            UsernameExistsError:
+                Username already exists
         """
 
         if self._user_repository.find_by_username(username):
             raise UsernameExistsError(f"Username {username} exists already")
 
-        self._user_repository.create(User(username, password))
+        user = self._user_repository.create(User(username, password))
+
+        return user
 
     def login(self, username, password):
         """User login.
@@ -45,6 +52,8 @@ class MagicService:
         Args:
             username: string
             password: string
+        Returns:
+            Logged in User -object
         Raises:
             InvalidUsernameError:
                 Username doesn't match.
@@ -60,6 +69,8 @@ class MagicService:
             raise InvalidPasswordError("Invalid password")
 
         self._user = user
+
+        return user
 
     def logout(self):
         """Logout current user.

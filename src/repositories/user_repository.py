@@ -60,9 +60,8 @@ class UserRepository:
 
         Args:
             user: User -object
-
         Returns:
-            User -object
+            Created User -object
         """
 
         cursor = self._connection.cursor()
@@ -76,6 +75,8 @@ class UserRepository:
             print("Error:", e)
 
         self._connection.commit()
+
+        return user
 
 
 user_repository = UserRepository(get_database_connection())

@@ -16,15 +16,15 @@ At the start, the application displays a **login view**, where users can either 
 
 ### Before Logging In
 
-- Users can create an account
+- Users can create an account ("done")
   - The username must be unique and at least **3 characters** long.
   - The password must be at least **12 characters** long.
-- Users can log in
+- Users can log in ("done")
   - If the username does not exist or the password is incorrect, the system notifies the user.
 
 ### After Logging In
 
-- The user sees the main interface, where they can add new cards or search for existing ones.
+- The user sees the main interface. ("done")
 - Users can add new cards to the database one at a time based on the name of the card.
   - Each user only sees their own cards.
 - Users can search for cards using different kinds of filters, such as:
@@ -34,7 +34,7 @@ At the start, the application displays a **login view**, where users can either 
   - cards that cost three red mana
   - etc.
 - Users can delete cards from the database.
-- Users can log out.
+- Users can log out. ("done")
 
 ## Future Development Ideas
 
