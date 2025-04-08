@@ -12,4 +12,6 @@ The **ui** package contains the code responsible for the user interface, **servi
 
 The following class/package diagram describes the application logic and relationship between the MagicService class and the rest of the application:
 
+**NOTE: in the future diagram will include classes/packages responsible for connecting to Scryfall API**
+
 ![Package Structure and Classes](./pics/architecture_package_classes.png)
