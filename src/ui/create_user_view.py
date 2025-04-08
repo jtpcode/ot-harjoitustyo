@@ -98,6 +98,8 @@ class CreateUserView:
             width=20)
         create_user_button.pack(pady=(15, 0))
 
+        # TBA: button to Login view
+
         self._error_label = ttk.Label(
             master=self._frame,
             textvariable=self._error_variable,

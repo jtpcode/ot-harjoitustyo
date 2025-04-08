@@ -61,3 +61,11 @@ poetry run invoke coverage-report
 
 The report will be generated in the *htmlcov* directory.
 
+### Linting
+
+Linting can be done with:
+
+```bash
+poetry run invoke lint
+```
+
