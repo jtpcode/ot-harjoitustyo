@@ -67,6 +67,7 @@ class LoginView:
         self._username_entry.pack()
 
     def _initialize_password(self):
+        # TBA: hide password text (also from create account!!)
         password_label = ttk.Label(master=self._frame, text="Password")
         self._password_entry = ttk.Entry(master=self._frame, width=30)
 

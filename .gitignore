@@ -33,7 +33,6 @@ venv.bak/
 
 # Other
 .pytest_cache
-pytest.ini
 testi.py
 
 # Data files
