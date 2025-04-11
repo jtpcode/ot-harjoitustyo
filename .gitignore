@@ -37,4 +37,4 @@ pytest.ini
 testi.py
 
 # Data files
-data/*.*
+data/*.db
