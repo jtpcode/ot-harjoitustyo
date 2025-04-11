@@ -6,7 +6,7 @@ from services.magic_service import MagicService, InvalidUsernameError, InvalidPa
 class LoginView:
     """User interface for login."""
 
-    def __init__(self, root, show_create_user_view, show_magic_card_view):
+    def __init__(self, root, show_create_user_view, show_magic_card_view, user_created):
         """Class constructor. Creates a new login view.
 
         Args:
@@ -19,6 +19,7 @@ class LoginView:
         self._root = root
         self._show_create_user_view = show_create_user_view
         self._show_magic_card_view = show_magic_card_view
+        self._user_created = user_created
         self._frame = None
         self._username_entry = None
         self._password_entry = None
@@ -67,9 +68,12 @@ class LoginView:
         self._username_entry.pack()
 
     def _initialize_password(self):
-        # TBA: hide password text (also from create account!!)
         password_label = ttk.Label(master=self._frame, text="Password")
-        self._password_entry = ttk.Entry(master=self._frame, width=30)
+        self._password_entry = ttk.Entry(
+            master=self._frame,
+            show="*",
+            width=30
+        )
 
         password_label.pack(pady=(10, 0))
         self._password_entry.pack()
@@ -83,7 +87,16 @@ class LoginView:
             text="Magic Archive",
             font=("Arial", 24, "bold"),
         )
-        title_label.pack(pady=(0, 60))
+        title_label.pack(pady=(0, 50))
+
+        if self._user_created:
+            self._user_created = False
+            self._user_created_label = ttk.Label(
+                master=self._frame,
+                text="User created successfully",
+                foreground="green"
+            )
+            self._user_created_label.pack(pady=(0, 10))
 
         self._initialize_username()
         self._initialize_password()
@@ -94,22 +107,19 @@ class LoginView:
             width=20)
         login_button.pack(pady=(15, 0))
 
-        # TBA: place in the middle
         self._error_label = ttk.Label(
             master=self._frame,
             textvariable=self._error_variable,
             foreground="red"
         )
-        self._error_label.pack(pady=(5, 0))
+        self._error_label.pack(pady=(10, 0))
 
         new_user_label = ttk.Label(
             master=self._frame, text="New user? Create an account here:")
-        new_user_label.pack(pady=(70, 10))
+        new_user_label.pack(pady=(50, 10))
         create_user_button = ttk.Button(
             master=self._frame,
             text="Create user",
             command=self._show_create_user_view,
             width=20)
         create_user_button.pack()
-
-        self._error_label.pack_forget()

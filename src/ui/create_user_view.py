@@ -55,8 +55,8 @@ class CreateUserView:
 
         try:
             magic_service.create_user(username, password)
-            # TBA: "Account created successfully -alert"
-            self._show_login_view()
+            user_created = True
+            self._show_login_view(user_created)
         except UsernameExistsError as e:
             self._show_error(str(e))
 
@@ -73,7 +73,11 @@ class CreateUserView:
 
     def _initialize_new_password(self):
         new_password_label = ttk.Label(master=self._frame, text="Password")
-        self._new_password_entry = ttk.Entry(master=self._frame, width=30)
+        self._new_password_entry = ttk.Entry(
+            master=self._frame,
+            show="*",
+            width=30
+        )
 
         new_password_label.pack(pady=(10, 0))
         self._new_password_entry.pack()
@@ -98,13 +102,18 @@ class CreateUserView:
             width=20)
         create_user_button.pack(pady=(15, 0))
 
-        # TBA: button to Login view
+        login_view_button = ttk.Button(
+            master=self._frame,
+            text="Login",
+            command=self._show_login_view,
+            width=20)
+        login_view_button.pack(pady=(15, 0))
 
         self._error_label = ttk.Label(
             master=self._frame,
             textvariable=self._error_variable,
             foreground="red"
         )
-        self._error_label.pack(pady=(5, 0))
+        self._error_label.pack(pady=(10, 0))
 
         self._error_label.pack_forget()

@@ -26,13 +26,14 @@ class UI:
 
         self._current_view = None
 
-    def _show_login_view(self):
+    def _show_login_view(self, user_created=False):
         self._hide_current_view()
 
         self._current_view = LoginView(
             self._root,
             self._show_create_user_view,
-            self._show_magic_card_view
+            self._show_magic_card_view,
+            user_created
         )
 
         self._current_view.pack()
