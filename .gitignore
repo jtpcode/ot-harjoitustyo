@@ -23,6 +23,7 @@ __pypackages__/
 
 # Environments
 .env
+.env.*
 .venv
 env/
 venv/
@@ -33,7 +34,6 @@ venv.bak/
 # Other
 .pytest_cache
 pytest.ini
-*.db
 testi.py
 
 # Data files

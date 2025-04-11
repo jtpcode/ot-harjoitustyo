@@ -1,6 +1,6 @@
 # Changelog
 
-## Viikko 3
+## Week 3
 
 - User can see the "login" and "create user" views
 - Added local SQLite database access
@@ -10,7 +10,7 @@
 - 'Create user' -button creates a new user into the database
 - UserRepository tested for "create new user" and "find all users"
 
-## Viikko 4
+## Week 4
 
 - User can login and logout
 - Error message is shown if login credentials are not correct
@@ -21,3 +21,8 @@
 - Logout directs user to "login" view
 - UserRepository tested for "find by username"
 - MagicService tested for "login" and "create user"
+
+## Week 5
+
+- Test database environment created
+- 
