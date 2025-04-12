@@ -1,5 +1,5 @@
 import unittest
-import initialize_database
+from utils.database import initialize_database
 from repositories.user_repository import user_repository
 from entities.user import User
 

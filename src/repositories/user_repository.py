@@ -1,5 +1,5 @@
 from sqlite3 import Error
-from database_connection import get_database_connection
+from utils.database.database_connection import get_database_connection
 from entities.user import User
 
 

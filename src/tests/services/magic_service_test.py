@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock
-import initialize_database
+from utils.database import initialize_database
 from repositories.user_repository import user_repository
 from entities.user import User
 from services.magic_service import (

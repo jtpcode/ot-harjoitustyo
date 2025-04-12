@@ -1,4 +1,4 @@
-from initialize_database import initialize_database
+from utils.database.initialize_database import initialize_database
 
 
 def pytest_configure():
