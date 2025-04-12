@@ -10,6 +10,6 @@
 | 7.4. | 3    | Enable logout (direct user back to "login" view), add error messages to account creation |
 | 8.4. | 4    | New tests for UserRepository and MagicService, autopep8 |
 | 11.4. | 4    | Tweak UI error/info messages and layout, add test database environment |
-| 12.4. | 1    | Refactor user creation error handlind, add related tests,  |
+| 12.4. | 4    | Refactor user creation error handling, add related tests, move helper function etc. to 'utils' |
 
 **Total hours: 30**

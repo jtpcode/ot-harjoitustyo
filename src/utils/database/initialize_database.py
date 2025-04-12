@@ -45,6 +45,8 @@ def initialize_database():
     drop_tables(connection)
     create_tables(connection)
 
+    print("Database initialized.")
+
 
 if __name__ == "__main__":
     initialize_database()

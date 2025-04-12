@@ -24,7 +24,8 @@
 
 ## Week 5
 
-- Test database environment created
+- Separate database environment for testing created
 - Hide password characters in UI
 - Add notification of successfull user creation
+- Move helper functions/files to 'utils' directory
 - 

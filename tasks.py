@@ -22,8 +22,8 @@ def coverage_report(ctx):
 
 
 @task
-def init_db(ctx):
-    ctx.run("python3 src/utils/database/initialize_database.py", pty=True)
+def build(ctx):
+    ctx.run("python3 src/build.py", pty=True)
 
 
 @task

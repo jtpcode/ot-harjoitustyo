@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import Mock
-from utils.database import initialize_database
+from utils.database.initialize_database import initialize_database
 from repositories.user_repository import user_repository
 from entities.user import User
 from services.magic_service import (
@@ -15,7 +15,7 @@ from services.magic_service import (
 
 class TestMagicService(unittest.TestCase):
     def setUp(self):
-        initialize_database.initialize_database()
+        initialize_database()
         self.user_alfa = User('alfa', '1234alfa5678')
         user_repository.create(self.user_alfa)
 

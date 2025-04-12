@@ -1,12 +1,12 @@
 import unittest
-from utils.database import initialize_database
+from utils.database.initialize_database import initialize_database
 from repositories.user_repository import user_repository
 from entities.user import User
 
 
 class TestUserRepository(unittest.TestCase):
     def setUp(self):
-        initialize_database.initialize_database()
+        initialize_database()
         self.user_alfa = User('alfa', '1234alfa5678')
         self.user_beta = User('beta', '1234beta5678')
         user_repository.create(self.user_alfa)
