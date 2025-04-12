@@ -10,13 +10,14 @@ class UserRepository:
         """Class constructor
 
         Args:
-            connection: Connection -object for the database connection
+            connection:
+                Connection -object for the database connection
         """
 
         self._connection = connection
 
     def find_all(self):
-        """Returns all users.
+        """Returns all users
 
         Returns:
             A list of User -objects
@@ -34,7 +35,7 @@ class UserRepository:
         return [User(row[1], row[2]) for row in rows]
 
     def find_by_username(self, username):
-        """Returns a specific user.
+        """Returns a specific user
 
         Args:
             username
@@ -62,7 +63,8 @@ class UserRepository:
         """Save new user into database
 
         Args:
-            user: User -object
+            user:
+                User -object
         Returns:
             Created User -object
         """

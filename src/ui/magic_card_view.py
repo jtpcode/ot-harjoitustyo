@@ -1,5 +1,6 @@
 from tkinter import ttk, constants
 from services.magic_service import MagicService
+from utils.ui_utils import center_window
 
 
 class MagicCardView:
@@ -19,13 +20,7 @@ class MagicCardView:
         self._show_login_view = show_login_view
         self._frame = None
 
-        # Center the window
-        self._height = 500
-        self._width = 500
-        x = (self._root.winfo_screenwidth() // 2) - (self._width // 2)
-        y = (self._root.winfo_screenheight() // 2) - (self._height // 2)
-        self._root.geometry(f'{self._width}x{self._height}+{x}+{y}')
-
+        center_window(self._root, 800, 800)
         self._initialize()
 
     def pack(self):

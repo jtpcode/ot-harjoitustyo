@@ -9,5 +9,7 @@
 | 6.4. | 4    | Enable login (direct user to "card management" view), add login error messages, pylint, documentation |
 | 7.4. | 3    | Enable logout (direct user back to "login" view), add error messages to account creation |
 | 8.4. | 4    | New tests for UserRepository and MagicService, autopep8 |
+| 11.4. | 4    | Tweak UI error/info messages and layout, add test database environment |
+| 12.4. | 1    | Refactor user creation error handlind, add related tests,  |
 
-**Total hours: 25**
+**Total hours: 30**

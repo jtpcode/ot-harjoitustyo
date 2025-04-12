@@ -1,5 +1,6 @@
 from tkinter import ttk, StringVar
 from repositories.user_repository import user_repository
+from utils.ui_utils import center_window
 from services.magic_service import (
     MagicService,
     UsernameExistsError,
@@ -29,13 +30,7 @@ class CreateUserView:
         self._error_variable = None
         self._error_label = None
 
-        # Center the window
-        self._height = 500
-        self._width = 500
-        x = (self._root.winfo_screenwidth() // 2) - (self._width // 2)
-        y = (self._root.winfo_screenheight() // 2) - (self._height // 2)
-        self._root.geometry(f'{self._width}x{self._height}+{x}+{y}')
-
+        center_window(self._root, 500, 500)
         self._initialize()
 
     def pack(self):

@@ -28,7 +28,8 @@ class MagicService:
         """Class constructor. Creates a new service for the application logic.
 
         Args:
-            user_repository: Repository responsible for user database actions.
+            user_repository:
+                Repository responsible for user database actions.
         """
 
         self._user = None
@@ -38,8 +39,8 @@ class MagicService:
         """Creates a new user
 
         Args:
-            username (str)
-            password (str)
+            username (str):
+            password (str):
         Returns:
             Created User -object
         Raises:
@@ -67,11 +68,11 @@ class MagicService:
         return user
 
     def login(self, username, password):
-        """User login.
+        """User login
 
         Args:
-            username (str)
-            password (str)
+            username (str):
+            password (str):
         Returns:
             Logged in User -object
         Raises:
@@ -93,7 +94,7 @@ class MagicService:
         return user
 
     def logout(self):
-        """Logout current user.
+        """Logout current user
         """
 
         self._user = None

@@ -2,16 +2,16 @@ class User:
     """Class for a single user
 
     Attributes:
-        username: string
-        password: string
+        username (str):
+        password (str):
     """
 
     def __init__(self, username, password):
         """Class constructor, creates a new user
 
         Args:
-            username: string
-            password: string
+            username (str):
+            password (str):
         """
 
         self.username = username
