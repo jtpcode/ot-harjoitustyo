@@ -1,6 +1,11 @@
 from tkinter import ttk, StringVar
 from repositories.user_repository import user_repository
-from services.magic_service import MagicService, UsernameExistsError
+from services.magic_service import (
+    MagicService,
+    UsernameExistsError,
+    UsernameTooShortError,
+    PasswordTooShortError
+)
 
 
 class CreateUserView:
@@ -46,18 +51,15 @@ class CreateUserView:
         password = self._new_password_entry.get()
         magic_service = MagicService(user_repository)
 
-        if len(username) < 3:
-            self._show_error("Username must be at least 3 characters long")
-            return
-        if len(password) < 12:
-            self._show_error("Password must be at least 12 characters long")
-            return
-
         try:
             magic_service.create_user(username, password)
             user_created = True
             self._show_login_view(user_created)
         except UsernameExistsError as e:
+            self._show_error(str(e))
+        except UsernameTooShortError as e:
+            self._show_error(str(e))
+        except PasswordTooShortError as e:
             self._show_error(str(e))
 
     def _show_error(self, message):

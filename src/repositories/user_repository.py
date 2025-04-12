@@ -1,3 +1,4 @@
+from sqlite3 import Error
 from database_connection import get_database_connection
 from entities.user import User
 
@@ -25,8 +26,8 @@ class UserRepository:
 
         try:
             cursor.execute("SELECT * FROM Users")
-        except Exception as e:
-            print("Error:", e)
+        except Error as e:
+            print("Database error in User repository 'find_all':", e)
 
         rows = cursor.fetchall()
 
@@ -35,8 +36,10 @@ class UserRepository:
     def find_by_username(self, username):
         """Returns a specific user.
 
+        Args:
+            username
         Returns:
-            A User -object
+            A User -object or None if not found
         """
 
         cursor = self._connection.cursor()
@@ -46,8 +49,8 @@ class UserRepository:
                 "SELECT * FROM Users WHERE username = ?",
                 (username,)
             )
-        except Exception as e:
-            print("Error:", e)
+        except Error as e:
+            print("Database error in User repository 'find_by_username':", e)
 
         row = cursor.fetchone()
 
@@ -71,8 +74,8 @@ class UserRepository:
                 "INSERT INTO Users (username, password) VALUES (?, ?)",
                 (user.username, user.password)
             )
-        except Exception as e:
-            print("Error:", e)
+        except Error as e:
+            print("Database error in User repository 'create':", e)
 
         self._connection.commit()
 

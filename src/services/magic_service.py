@@ -13,11 +13,19 @@ class UsernameExistsError(Exception):
     pass
 
 
+class UsernameTooShortError(Exception):
+    pass
+
+
+class PasswordTooShortError(Exception):
+    pass
+
+
 class MagicService:
     """Class responsible for application logic."""
 
     def __init__(self, user_repository=None):
-        """Class constructor. Creates a new services for the application logic.
+        """Class constructor. Creates a new service for the application logic.
 
         Args:
             user_repository: Repository responsible for user database actions.
@@ -30,15 +38,27 @@ class MagicService:
         """Creates a new user
 
         Args:
-            username: string
-            password: string
+            username (str)
+            password (str)
         Returns:
             Created User -object
         Raises:
             UsernameExistsError:
-                Username already exists
+                Username already exist.
+            UsernameTooShortError:
+                Username is too short (minimum 3 characters)
+            PasswordTooShortError:
+                Password is too short (minimum 12 characters)
         """
 
+        if len(username) < 3:
+            raise UsernameTooShortError(
+                "Username must be at least 3 characters long"
+            )
+        if len(password) < 12:
+            raise PasswordTooShortError(
+                "Password must be at least 12 characters long"
+            )
         if self._user_repository.find_by_username(username):
             raise UsernameExistsError(f"Username {username} exists already")
 
@@ -50,8 +70,8 @@ class MagicService:
         """User login.
 
         Args:
-            username: string
-            password: string
+            username (str)
+            password (str)
         Returns:
             Logged in User -object
         Raises:
@@ -75,4 +95,5 @@ class MagicService:
     def logout(self):
         """Logout current user.
         """
+
         self._user = None

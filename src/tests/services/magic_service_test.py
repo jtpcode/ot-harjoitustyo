@@ -7,7 +7,9 @@ from services.magic_service import (
     MagicService,
     InvalidUsernameError,
     InvalidPasswordError,
-    UsernameExistsError
+    UsernameExistsError,
+    UsernameTooShortError,
+    PasswordTooShortError
 )
 
 
@@ -35,7 +37,7 @@ class TestMagicService(unittest.TestCase):
 
         self.assertRaises(
             InvalidUsernameError,
-            lambda: self.magic_service.login('fo', 'barbarbarbar')
+            lambda: self.magic_service.login('foo', 'barbarbarbar')
         )
 
     def test_login_with_invalid_password(self):
@@ -43,10 +45,10 @@ class TestMagicService(unittest.TestCase):
 
         self.assertRaises(
             InvalidPasswordError,
-            lambda: self.magic_service.login('alfa', 'invalid')
+            lambda: self.magic_service.login('alfa', 'invalid_password')
         )
 
-    def test_create_user_with_valid_username(self):
+    def test_create_user_with_non_existing_username_and_valid_password(self):
         self.user_repository_mock.find_by_username.return_value = None
         self.user_repository_mock.create.return_value = self.user_alfa
 
@@ -54,10 +56,22 @@ class TestMagicService(unittest.TestCase):
 
         self.assertEqual(user.username, 'alfa')
 
-    def test_create_user_with_invalid_username(self):
+    def test_create_user_with_existing_username(self):
         self.user_repository_mock.find_by_username.return_value = self.user_alfa
 
         self.assertRaises(
             UsernameExistsError,
             lambda: self.magic_service.create_user('alfa', '1234alfa5678')
+        )
+
+    def test_create_user_with_too_short_username(self):
+        self.assertRaises(
+            UsernameTooShortError,
+            lambda: self.magic_service.create_user('al', '1234alfa5678')
+        )
+
+    def test_create_user_with_too_short_password(self):
+        self.assertRaises(
+            PasswordTooShortError,
+            lambda: self.magic_service.create_user('alfa', '1234')
         )
