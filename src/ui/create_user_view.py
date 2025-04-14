@@ -19,7 +19,7 @@ class CreateUserView:
             root:
                 TKinter -element, which initializes the user interface.
             show_login_view:
-                Direct user to login view
+                Direct user to "Login" view
         """
 
         self._root = root

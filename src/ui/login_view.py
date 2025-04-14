@@ -1,6 +1,7 @@
 from tkinter import ttk, StringVar
 from repositories.user_repository import user_repository
 from services.magic_service import MagicService, InvalidUsernameError, InvalidPasswordError
+from utils.ui_utils import center_window
 
 
 class LoginView:
@@ -13,7 +14,11 @@ class LoginView:
             root:
                 TKinter -element, which initializes the user interface.
             show_create_user_view:
-                Directs user to "Create new user" -view
+                Directs user to "Create new user" view
+            show_magic_card_view:
+                Directs user to "Magic card view" aka Main view
+            user_created (bool):
+                Signals successfull new user creation
         """
 
         self._root = root
@@ -26,13 +31,7 @@ class LoginView:
         self._error_variable = None
         self._error_label = None
 
-        # Center the window
-        self._height = 500
-        self._width = 500
-        x = (self._root.winfo_screenwidth() // 2) - (self._width // 2)
-        y = (self._root.winfo_screenheight() // 2) - (self._height // 2)
-        self._root.geometry(f'{self._width}x{self._height}+{x}+{y}')
-
+        center_window(self._root, 500, 500)
         self._initialize()
 
     def pack(self):
@@ -54,6 +53,8 @@ class LoginView:
         except InvalidUsernameError as e:
             self._show_error(str(e))
         except InvalidPasswordError as e:
+            self._password_entry.delete(0, 'end')
+            self._password_entry.focus_set()
             self._show_error(str(e))
 
     def _show_error(self, message):
