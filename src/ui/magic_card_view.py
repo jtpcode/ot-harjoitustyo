@@ -136,12 +136,18 @@ class MagicCardView:
             sticky=constants.NE
         )
 
-    def initialize_show_card(self, cards_frame):
-        for i in range(10):
-            card = ttk.Label(
-                cards_frame, text=f"Magic card {i+1}", relief="solid", padding=5
-            )
-            card.pack(fill="x", pady=2)
+    def initialize_show_cards(self, cards_frame):
+        instruction = ttk.Label(
+            cards_frame,
+            text="""OHJE TESTAAJALLE:
+                    käytä 'Card name' -kentässä tekstiä 'Firebolt'
+                    ja valitse 'Set name' valikosta 'Eternal masters'.
+                    Terminaaliin tulostuu kortin nimi. Voit toki käyttää
+                    mitä tahansa muutakin settiä ja siihen kuuluvaa
+                    korttia.""",
+            relief="solid"
+        )
+        instruction.pack(fill="x", pady=2)
 
     def _initialize(self):
         # Initialize dropdown menu for Set selection
@@ -184,4 +190,4 @@ class MagicCardView:
         self.initialize_label(top_frame)
         self.initialize_card_search(center_frame)
         self.initialize_logout(top_frame)
-        self.initialize_show_card(cards_frame)
+        self.initialize_show_cards(cards_frame)
