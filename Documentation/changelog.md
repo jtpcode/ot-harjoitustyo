@@ -28,4 +28,6 @@
 - Hide password characters in UI
 - Add notification of successfull user creation
 - Move helper functions/files to 'utils' directory
-- 
+- Add CardRepository for fetching cards from api.scryfall.com and storing them in Sqlite
+- Initial version of "Magic card view" for fetching and showing Magic cards
+

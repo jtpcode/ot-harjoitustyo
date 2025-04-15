@@ -11,5 +11,6 @@
 | 8.4. | 4    | New tests for UserRepository and MagicService, autopep8 |
 | 11.4. | 4    | Tweak UI error/info messages and layout, add test database environment |
 | 12.4. | 4    | Refactor user creation error handling, add related tests, move helper function etc. to 'utils' |
+| 14.4. | 3    | Update Magic card view, add "request" lib functionality for fetching cards online |
 
-**Total hours: 30**
+**Total hours: 36**
