@@ -45,8 +45,14 @@ class MagicCardView:
         card_name = self._card_search_entry.get()
         set_code = self._all_sets[self._selected_set.get()]
 
-        card = card_repository.fetch_card_by_name_and_set(card_name, set_code)
-        print(card["name"])
+        response = card_repository.fetch_card_by_name_and_set(
+            card_name, set_code
+        )
+        # Placeholder code, later add to database
+        if response["object"] == "card":
+            print(response["name"])
+        else:
+            print(response["details"])
 
     def initialize_sets(self):
         sets = card_repository.fetch_all_sets()

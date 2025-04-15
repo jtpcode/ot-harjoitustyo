@@ -14,4 +14,4 @@
 | 14.4. | 3    | Update Magic card view, add "request" lib functionality for fetching cards online |
 | 15.4. | 5    | New test for CardRepository, fetching single cards now works |
 
-**Total hours: 36**
+**Total hours: 41**
