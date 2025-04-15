@@ -30,4 +30,6 @@
 - Move helper functions/files to 'utils' directory
 - Add CardRepository for fetching cards from api.scryfall.com and storing them in Sqlite
 - Initial version of "Magic card view" for fetching and showing Magic cards
+- Fetching cards from api.scryfall.com works, currently only prints the name in terminal
+- CardRepository tested for "fetch_card_by_name_and_set"
 
