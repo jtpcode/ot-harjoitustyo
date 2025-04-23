@@ -4,7 +4,12 @@ from ui.magic_card_view import MagicCardView
 
 
 class UI:
-    """Class for the graphical user interface of the application."""
+    """Class for the graphical user interface of the application.
+
+    Attributes:
+        root:
+            TKinter -element, which initializes the user interface.
+    """
 
     def __init__(self, root):
         """Class constructor. Creates a new class for the user interface.
@@ -18,6 +23,7 @@ class UI:
 
     def start(self):
         """Starts the user interface."""
+
         self._show_login_view()
 
     def _hide_current_view(self):

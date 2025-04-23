@@ -1,5 +1,5 @@
 class User:
-    """Class for a single user
+    """Class for an application user.
 
     Attributes:
         username (str):
@@ -7,7 +7,7 @@ class User:
     """
 
     def __init__(self, username, password):
-        """Class constructor, creates a new user
+        """Class constructor, creates a new user.
 
         Args:
             username (str):

@@ -5,7 +5,18 @@ from utils.ui_utils import center_window
 
 
 class LoginView:
-    """User interface for login."""
+    """User interface for login.
+
+    Attributes:
+        root:
+            TKinter -element, which initializes the user interface.
+        show_create_user_view:
+            Directs user to "Create new user" view.
+        show_magic_card_view:
+            Directs user to "Magic card view" aka Main view.
+        user_created (bool):
+            Signals successfull new user creation.
+    """
 
     def __init__(self, root, show_create_user_view, show_magic_card_view, user_created):
         """Class constructor. Creates a new login view.
@@ -14,11 +25,11 @@ class LoginView:
             root:
                 TKinter -element, which initializes the user interface.
             show_create_user_view:
-                Directs user to "Create new user" view
+                Directs user to "Create new user" view.
             show_magic_card_view:
-                Directs user to "Magic card view" aka Main view
+                Directs user to "Magic card view" aka Main view.
             user_created (bool):
-                Signals successfull new user creation
+                Signals successfull new user creation.
         """
 
         self._root = root
@@ -36,13 +47,17 @@ class LoginView:
 
     def pack(self):
         """Show current view."""
+
         self._frame.place(relx=0.5, rely=0.5, anchor="center")
 
     def destroy(self):
         """Destroy current view."""
+
         self._frame.destroy()
 
     def _login_handler(self):
+        """Login the user."""
+
         username = self._username_entry.get()
         password = self._password_entry.get()
         magic_service = MagicService(user_repository)

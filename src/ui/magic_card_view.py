@@ -5,7 +5,14 @@ from utils.ui_utils import center_window
 
 
 class MagicCardView:
-    """User interface for managing Magic the Gathering cards."""
+    """User interface for managing 'Magic the Gathering' cards.
+
+    Attributes:
+        root:
+            TKinter -element, which initializes the user interface.
+        show_login_view:
+            Direct user to "Login" view.
+    """
 
     def __init__(self, root, show_login_view):
         """Class constructor. Creates a view for managing Magic the Gathering cards.
@@ -14,7 +21,7 @@ class MagicCardView:
             root:
                 TKinter -element, which initializes the user interface.
             show_login_view:
-                Direct user to "Login" view
+                Direct user to "Login" view.
         """
 
         self._root = root
@@ -30,18 +37,24 @@ class MagicCardView:
 
     def pack(self):
         """Show current view."""
+
         self._frame.pack(fill=constants.X)
 
     def destroy(self):
         """Destroy current view."""
+
         self._frame.destroy()
 
     def _logout_handler(self):
+        """Logout current user."""
+
         magic_service = MagicService()
         magic_service.logout()
         self._show_login_view()
 
     def _submit_handler(self):
+        """Save a new card into database."""
+
         card_name = self._card_search_entry.get()
         set_code = self._all_sets[self._selected_set.get()]
 
@@ -55,10 +68,15 @@ class MagicCardView:
             print(response["details"])
 
     def initialize_sets(self):
-        sets = card_repository.fetch_all_sets()
+        """Form a dictionary that can be used for populating a dropdown list for
+        card set 'names' and also for fetching cards with 'code' in _submit_handler().
 
-        # Form a dictionary that can be used for populating dropdown list with "name"
-        # and also for fetching cards with "code" in _submit_handler
+        Returns:
+            A dictionary with all available card sets, with key = 'name'
+            and value = 'code'.
+        """
+
+        sets = card_repository.fetch_all_sets()
         self._all_sets = {set["name"]: set["code"] for set in sets["data"]}
 
     def initialize_label(self, top_frame):

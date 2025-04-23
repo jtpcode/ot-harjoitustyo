@@ -4,23 +4,30 @@ from entities.user import User
 
 
 class UserRepository:
-    """Class responsible for user database actions"""
+    """Class responsible for user database actions.
+
+    Attributes:
+        connection:
+            Connection -object for the database connection.
+    """
 
     def __init__(self, connection):
-        """Class constructor
+        """Class constructor. Creates a new user repository.
 
         Args:
             connection:
-                Connection -object for the database connection
+                Connection -object for the database connection.
         """
 
         self._connection = connection
 
     def find_all(self):
-        """Returns all users
+        """Returns all users.
 
         Returns:
-            A list of User -objects
+            A list of User -objects.
+        Raises:
+            Error:
         """
 
         cursor = self._connection.cursor()
@@ -35,12 +42,14 @@ class UserRepository:
         return [User(row[1], row[2]) for row in rows]
 
     def find_by_username(self, username):
-        """Returns a specific user
+        """Returns a specific user.
 
         Args:
-            username
+            username (str):
         Returns:
-            A User -object or None if not found
+            A User -object or None if not found.
+        Raises:
+            Error:
         """
 
         cursor = self._connection.cursor()
@@ -60,13 +69,15 @@ class UserRepository:
         return None
 
     def create(self, user):
-        """Save new user into database
+        """Save new user into database.
 
         Args:
             user:
                 User -object
         Returns:
-            Created User -object
+                User -object
+        Raises:
+            Error:
         """
 
         cursor = self._connection.cursor()

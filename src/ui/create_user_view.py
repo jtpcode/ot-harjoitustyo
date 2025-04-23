@@ -10,7 +10,14 @@ from services.magic_service import (
 
 
 class CreateUserView:
-    """User interface for creating a new user."""
+    """User interface for creating a new user.
+
+    Attributes:
+        root:
+            TKinter -element, which initializes the user interface.
+        show_login_view:
+            Direct user to "Login" view.
+    """
 
     def __init__(self, root, show_login_view):
         """Class constructor. Creates a new view for creating a new user.
@@ -19,7 +26,7 @@ class CreateUserView:
             root:
                 TKinter -element, which initializes the user interface.
             show_login_view:
-                Direct user to "Login" view
+                Direct user to "Login" view.
         """
 
         self._root = root
@@ -35,13 +42,18 @@ class CreateUserView:
 
     def pack(self):
         """Show current view."""
+
         self._frame.place(relx=0.5, rely=0.5, anchor="center")
 
     def destroy(self):
         """Destroy current view."""
+
         self._frame.destroy()
 
     def _create_user_handler(self):
+        """Save new user into database, then
+        change view to login."""
+
         username = self._new_username_entry.get()
         password = self._new_password_entry.get()
         magic_service = MagicService(user_repository)
@@ -112,5 +124,3 @@ class CreateUserView:
             foreground="red"
         )
         self._error_label.pack(pady=(10, 0))
-
-        self._error_label.pack_forget()

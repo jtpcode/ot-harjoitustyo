@@ -5,30 +5,38 @@ from config import USER_AGENT
 
 
 class CardRepository:
-    """Class responsible for fetching and storing Magic cards"""
+    """Class responsible for fetching Magic cards from api.scryfall.com
+    and storing them into database.
+
+    Attributes:
+        connection:
+            Connection -object for the database connection.
+    """
 
     def __init__(self, connection):
-        """Class constructor
+        """Class constructor. Creates a new card repository.
 
         Args:
             connection:
-                Connection -object for the database connection
+                Connection -object for the database connection.
         """
 
         self._connection = connection
+
+        # api.scryfall.com requires these headers
         self._headers = {
             "User-Agent": USER_AGENT,
             "Accept": "application/json"
         }
 
     def fetch_card_by_name_and_set(self, card_name, set_code):
-        """Fetches a specific card based on card name and set code
+        """Fetches a specific card based on card name and set code.
 
         Args:
             card_name (str):
             set_code (str):
         Returns:
-            A Card object in json format
+            A Card object in json format.
         Raises:
             RequestException:
         """
@@ -47,15 +55,15 @@ class CardRepository:
             )
             response.raise_for_status()  # Throw exception for error in response
         except requests.exceptions.RequestException as e:
-            print(f"Error in fetching card: {e}")
+            print(f"Error in fetching a card: {e}")
 
         return response.json()
 
     def fetch_all_sets(self):
-        """Fetches all sets
+        """Fetches all available card sets.
 
         Returns:
-            All sets in json format
+            All card sets in json format.
         Raises:
             RequestException:
         """
@@ -70,7 +78,7 @@ class CardRepository:
             )
             response.raise_for_status()  # Throw exception for error in response
         except requests.exceptions.RequestException as e:
-            print(f"Error in fetching all sets: {e}")
+            print(f"Error in fetching all card sets: {e}")
 
         return response.json()
 

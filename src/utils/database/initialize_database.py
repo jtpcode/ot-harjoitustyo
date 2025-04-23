@@ -2,10 +2,11 @@ from utils.database.database_connection import get_database_connection
 
 
 def drop_tables(connection):
-    """Drop database tables
+    """Drop database tables.
 
     Args:
-        connection: Connection -object for the database connection
+        connection:
+            Connection -object for the database connection.
     """
 
     cursor = connection.cursor()
@@ -18,10 +19,11 @@ def drop_tables(connection):
 
 
 def create_tables(connection):
-    """Create database tables
+    """Create database tables.
 
     Args:
-        connection: Connection -object for the database connection
+        connection:
+            Connection -object for the database connection.
     """
 
     cursor = connection.cursor()
@@ -38,7 +40,7 @@ def create_tables(connection):
 
 
 def initialize_database():
-    """Initialize database"""
+    """Initialize the database."""
 
     connection = get_database_connection()
 

@@ -22,34 +22,39 @@ class PasswordTooShortError(Exception):
 
 
 class MagicService:
-    """Class responsible for application logic."""
+    """Class responsible for 'Magic archive' application logic.
+
+    Attributes:
+        user_repository:
+            Repository responsible for user database actions, defaults to None.
+    """
 
     def __init__(self, user_repository=None):
         """Class constructor. Creates a new service for the application logic.
 
         Args:
             user_repository:
-                Repository responsible for user database actions.
+                Repository responsible for user database actions, defaults to None.
         """
 
         self._user = None
         self._user_repository = user_repository
 
     def create_user(self, username, password):
-        """Creates a new user
+        """Creates a new user.
 
         Args:
             username (str):
             password (str):
         Returns:
-            Created User -object
+            User -object
         Raises:
             UsernameExistsError:
                 Username already exist.
             UsernameTooShortError:
-                Username is too short (minimum 3 characters)
+                Username is too short (minimum 3 characters).
             PasswordTooShortError:
-                Password is too short (minimum 12 characters)
+                Password is too short (minimum 12 characters).
         """
 
         if len(username) < 3:
@@ -68,13 +73,13 @@ class MagicService:
         return user
 
     def login(self, username, password):
-        """User login
+        """User login.
 
         Args:
             username (str):
             password (str):
         Returns:
-            Logged in User -object
+            User -object
         Raises:
             InvalidUsernameError:
                 Username doesn't match.
@@ -94,7 +99,7 @@ class MagicService:
         return user
 
     def logout(self):
-        """Logout current user
+        """Logout current user.
         """
 
         self._user = None
