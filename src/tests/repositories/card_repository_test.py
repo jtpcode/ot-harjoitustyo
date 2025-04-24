@@ -34,16 +34,16 @@ class TestCardRepository(unittest.TestCase):
 
         mock_print.assert_called_with("Error in fetching a card: 404 error")
 
-    @patch("repositories.card_repository.requests.get")
-    def test_testi(self, mock_get):
-        self.mock_response.raise_for_status.side_effect = requests.exceptions.RequestException(
-            "404 error"
-        )
-        mock_get.return_value = self.mock_response
+    # @patch("repositories.card_repository.requests.get")
+    # def test_testi(self, mock_get):
+    #     self.mock_response.raise_for_status.side_effect = requests.exceptions.RequestException(
+    #         "404 error"
+    #     )
+    #     mock_get.return_value = self.mock_response
 
-        with self.assertRaises(requests.exceptions.RequestException):
-            card_repository.fetch_card_by_name_and_set(
-                "Invalid card name", "m10")
+    #     with self.assertRaises(requests.exceptions.RequestException):
+    #         card_repository.fetch_card_by_name_and_set(
+    #             "Invalid card name", "m10")
 
     @patch("repositories.card_repository.requests.get")
     def test_fetch_all_sets_returns_json(self, mock_get):

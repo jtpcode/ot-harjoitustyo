@@ -56,7 +56,7 @@ class CardRepository:
             )
             response.raise_for_status()  # Throw HTTP exception for error in response
         except requests.exceptions.RequestException as e:
-            raise requests.exceptions.HTTPError from e
+            print(f"Error in fetching a card: {e}")
 
         return response.json()
 

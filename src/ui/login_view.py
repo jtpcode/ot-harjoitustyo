@@ -60,7 +60,7 @@ class LoginView:
 
         username = self._username_entry.get()
         password = self._password_entry.get()
-        magic_service = MagicService(user_repository)
+        magic_service = MagicService(user_repository=user_repository)
 
         try:
             magic_service.login(username, password)

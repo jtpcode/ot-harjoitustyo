@@ -20,7 +20,8 @@ class TestMagicService(unittest.TestCase):
         user_repository.create(self.user_alfa)
 
         self.user_repository_mock = Mock()
-        self.magic_service = MagicService(self.user_repository_mock)
+        self.magic_service = MagicService(
+            user_repository=self.user_repository_mock)
 
     def test_login_with_valid_credentials(self):
         self.user_repository_mock.find_by_username.return_value = self.user_alfa

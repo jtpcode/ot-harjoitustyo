@@ -56,7 +56,7 @@ class CreateUserView:
 
         username = self._new_username_entry.get()
         password = self._new_password_entry.get()
-        magic_service = MagicService(user_repository)
+        magic_service = MagicService(user_repository=user_repository)
 
         try:
             magic_service.create_user(username, password)
