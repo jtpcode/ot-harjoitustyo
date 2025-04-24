@@ -13,5 +13,7 @@
 | 12.4. | 4    | Refactor user creation error handling, add related tests, move helper function etc. to 'utils' |
 | 14.4. | 3    | Update Magic card view, add "request" lib functionality for fetching cards online |
 | 15.4. | 5    | New test for CardRepository, fetching single cards now works |
+| 23.4. | 3    | New tests for CardRepository, error management |
+| 24.4. | 2   | Redefine card fetch logic from scryfall api |
 
-**Total hours: 41**
+**Total hours: 46**

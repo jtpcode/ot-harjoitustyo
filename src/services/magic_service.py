@@ -29,7 +29,7 @@ class MagicService:
             Repository responsible for user database actions, defaults to None.
     """
 
-    def __init__(self, user_repository=None):
+    def __init__(self, user_repository=None, card_repository=None):
         """Class constructor. Creates a new service for the application logic.
 
         Args:
@@ -39,9 +39,11 @@ class MagicService:
 
         self._user = None
         self._user_repository = user_repository
+        self._card_repository = card_repository
 
     def create_user(self, username, password):
-        """Creates a new user.
+        """Creates a new user. First validates that username
+        and password are valid.
 
         Args:
             username (str):
@@ -72,6 +74,14 @@ class MagicService:
 
         return user
 
+    def get_current_user(self):
+        """Returns current user who's logged in.
+
+        Returns:
+            User -object.
+        """
+        return self._user
+
     def login(self, username, password):
         """User login.
 
@@ -98,8 +108,26 @@ class MagicService:
 
         return user
 
-    def logout(self):
-        """Logout current user.
+    def fetch_card(self, card_name, set_code):
+        """Fetches a new Magic card based on card name and set code.
+        First checks if card already exists in database. If not,
+        card is fetched from api.scryfall.com via card_repository.
+
+        Args:
+            card_name (str):
+            set_code (str):
+        Returns:
+
         """
+
+        # TBA: check if card exists in db
+        card = self._card_repository.fetch_card_by_name_and_set(
+            card_name, set_code
+        )
+
+        return card
+
+    def logout(self):
+        """Logout current user."""
 
         self._user = None

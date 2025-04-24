@@ -75,3 +75,14 @@ class TestMagicService(unittest.TestCase):
             PasswordTooShortError,
             lambda: self.magic_service.create_user('alfa', '1234')
         )
+
+    def test_logout_user_successfully(self):
+        self.user_repository_mock.find_by_username.return_value = self.user_alfa
+
+        self.magic_service.login(
+            self.user_alfa.username,
+            self.user_alfa.password
+        )
+        self.magic_service.logout()
+
+        self.assertEqual(self.magic_service.get_current_user(), None)

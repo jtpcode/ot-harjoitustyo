@@ -33,3 +33,7 @@
 - Fetching cards from api.scryfall.com works, currently only prints the name in terminal
 - CardRepository tested for "fetch_card_by_name_and_set"
 
+## Week 6
+- Update docstrings
+- Further develop card fetch from scryfall api
+- 

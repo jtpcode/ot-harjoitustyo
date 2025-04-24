@@ -30,7 +30,8 @@ class CardRepository:
         }
 
     def fetch_card_by_name_and_set(self, card_name, set_code):
-        """Fetches a specific card based on card name and set code.
+        """Fetches a specific card from api.scryfall.com
+        based on card name and set code.
 
         Args:
             card_name (str):
@@ -53,9 +54,9 @@ class CardRepository:
                 headers=self._headers,
                 timeout=10
             )
-            response.raise_for_status()  # Throw exception for error in response
+            response.raise_for_status()  # Throw HTTP exception for error in response
         except requests.exceptions.RequestException as e:
-            print(f"Error in fetching a card: {e}")
+            raise requests.exceptions.HTTPError from e
 
         return response.json()
 
@@ -76,7 +77,7 @@ class CardRepository:
                 headers=self._headers,
                 timeout=10
             )
-            response.raise_for_status()  # Throw exception for error in response
+            response.raise_for_status()  # Throw HTTP exception for error in response
         except requests.exceptions.RequestException as e:
             print(f"Error in fetching all card sets: {e}")
 

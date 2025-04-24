@@ -1,4 +1,5 @@
 from tkinter import ttk, constants, StringVar
+import requests.exceptions
 from services.magic_service import MagicService
 from repositories.card_repository import card_repository
 from utils.ui_utils import center_window
@@ -57,15 +58,16 @@ class MagicCardView:
 
         card_name = self._card_search_entry.get()
         set_code = self._all_sets[self._selected_set.get()]
+        magic_service = MagicService(card_repository=card_repository)
 
-        response = card_repository.fetch_card_by_name_and_set(
-            card_name, set_code
-        )
         # Placeholder code, later add to database
-        if response["object"] == "card":
+        try:
+            response = magic_service.fetch_card(
+                card_name, set_code
+            )
             print(response["name"])
-        else:
-            print(response["details"])
+        except requests.exceptions.RequestException:
+            print("Ei onnistu.")
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
