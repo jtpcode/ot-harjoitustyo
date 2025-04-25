@@ -1,4 +1,5 @@
 from tkinter import ttk, constants, StringVar
+from ttkwidgets.autocomplete import AutocompleteCombobox
 import requests.exceptions
 from services.magic_service import MagicService
 from repositories.card_repository import card_repository
@@ -99,11 +100,10 @@ class MagicCardView:
         select_set_label = ttk.Label(master=center_frame, text="Set name : ")
         self._card_search_entry = ttk.Entry(master=center_frame, width=30)
         self._selected_set = StringVar(center_frame)
-        self._set_list_dropdown = ttk.Combobox(
+        self._set_list_dropdown = AutocompleteCombobox(
             master=center_frame,
             textvariable=self._selected_set,
-            values=sorted(list(self._all_sets)),
-            state="readonly",
+            completevalues=sorted(list(self._all_sets)),
             width=30
         )
         submit_button = ttk.Button(
