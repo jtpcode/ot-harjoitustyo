@@ -1,7 +1,9 @@
-# from sqlite3 import Error
+from sqlite3 import DatabaseError
+import json
 import requests
 from utils.database.database_connection import get_database_connection
 from config import USER_AGENT
+from entities.card import Card
 
 
 class CardRepository:
@@ -82,6 +84,88 @@ class CardRepository:
             print(f"Error in fetching all card sets: {e}")
 
         return response.json()
+
+    def create(self, card):
+        """Save a new card into database
+
+        Args:
+            card:
+                Card -object
+        Returns:
+            Card -object
+        Raises:
+            DatabaseError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            # Generated code begins
+            cursor.execute("""
+                INSERT INTO Cards (
+                    name, released_at, layout, mana_cost, cmc,
+                    colors, color_identity, type_line, oracle_text, keywords,
+                    card_faces, all_parts, power, toughness, image_uris,
+                    set_name, set_code, rarity, flavor_text, prices
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """, (
+                card.name,
+                card.released_at,
+                card.layout,
+                card.mana_cost,
+                card.cmc,
+                json.dumps(card.colors),
+                json.dumps(card.color_identity),
+                card.type_line,
+                card.oracle_text,
+                json.dumps(card.keywords),
+                json.dumps(card.card_faces),
+                json.dumps(card.all_parts),
+                card.power,
+                card.toughness,
+                json.dumps(card.image_uris),
+                card.set_name,
+                card.set_code,
+                card.rarity,
+                card.flavor_text,
+                json.dumps(card.prices)
+            )
+            )
+        # Generated code ends
+        except DatabaseError as e:
+            print("Database error in User repository 'create':", e)
+
+        self._connection.commit()
+
+        return card
+
+    def find_by_card_name(self, card_name):
+        """Returns a specific card.
+
+        Args:
+            card_name (str):
+        Returns:
+            A Card -object or None if not found.
+        Raises:
+            DatabaseError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT * FROM Cards WHERE name = ?",
+                (card_name,)
+            )
+        except DatabaseError as e:
+            print("Database error in Card repository 'find_by_card_name':", e)
+
+        row = cursor.fetchone()
+
+        if row:
+            return Card(*row[1:21])
+
+        return None
 
 
 card_repository = CardRepository(get_database_connection())

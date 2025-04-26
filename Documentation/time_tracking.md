@@ -15,5 +15,7 @@
 | 15.4. | 5    | New test for CardRepository, fetching single cards now works |
 | 23.4. | 3    | New tests for CardRepository, error management |
 | 24.4. | 2   | Redefine card fetch logic from scryfall api |
+| 25.4. | 5   | Study card json content in scryfall api |
+| 26.4. | 4   | Add saving new card into database |
 
-**Total hours: 46**
+**Total hours: 56**

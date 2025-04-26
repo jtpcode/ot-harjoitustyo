@@ -1,7 +1,6 @@
 from tkinter import ttk, constants, StringVar
 from ttkwidgets.autocomplete import AutocompleteCombobox
-import requests.exceptions
-from services.magic_service import MagicService
+from services.magic_service import MagicService, CardExistsError
 from repositories.card_repository import card_repository
 from utils.ui_utils import center_window
 
@@ -55,20 +54,24 @@ class MagicCardView:
         self._show_login_view()
 
     def _submit_handler(self):
-        """Save a new card into database."""
+        """Fetch and save a new card into database."""
+
+        set_selection = self._selected_set.get()
+        if self._card_search_entry.get() == "" or set_selection not in self._all_sets:
+            return
 
         card_name = self._card_search_entry.get()
-        set_code = self._all_sets[self._selected_set.get()]
+        set_code = self._all_sets[set_selection]
+
         magic_service = MagicService(card_repository=card_repository)
 
-        # Placeholder code, later add to database
         try:
-            response = magic_service.fetch_card(
+            card = magic_service.fetch_card(
                 card_name, set_code
             )
-            print(response["name"])
-        except requests.exceptions.RequestException:
-            print("Ei onnistu.")
+            print(card.name)
+        except CardExistsError as e:
+            print(e)
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for

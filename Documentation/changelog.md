@@ -35,5 +35,5 @@
 
 ## Week 6
 - Update docstrings
-- Further develop card fetch from scryfall api
+- New card is now saved into database
 - 

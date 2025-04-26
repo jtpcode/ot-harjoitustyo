@@ -75,7 +75,7 @@ class UserRepository:
             user:
                 User -object
         Returns:
-                User -object
+            User -object
         Raises:
             DatabaseError:
         """

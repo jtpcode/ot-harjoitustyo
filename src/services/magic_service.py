@@ -1,4 +1,5 @@
 from entities.user import User
+from entities.card import Card
 
 
 class InvalidUsernameError(Exception):
@@ -21,12 +22,19 @@ class PasswordTooShortError(Exception):
     pass
 
 
+class CardExistsError(Exception):
+    pass
+
+
 class MagicService:
     """Class responsible for 'Magic archive' application logic.
 
     Attributes:
         user_repository:
-            Repository responsible for user database actions, defaults to None.
+            Repository responsible for user database actions. Defaults to None.
+        card_repository:
+            Repository responsible for card operations: api.scryfall.com connection
+            and database actions. Defaults to None.
     """
 
     def __init__(self, user_repository=None, card_repository=None):
@@ -34,7 +42,10 @@ class MagicService:
 
         Args:
             user_repository:
-                Repository responsible for user database actions, defaults to None.
+                Repository responsible for user database actions. Defaults to None.
+            card_repository:
+                Repository responsible for card operations: api.scryfall.com connection
+                and database actions. Defaults to None.
         """
 
         self._user = None
@@ -80,6 +91,7 @@ class MagicService:
         Returns:
             User -object.
         """
+
         return self._user
 
     def login(self, username, password):
@@ -111,7 +123,8 @@ class MagicService:
     def fetch_card(self, card_name, set_code):
         """Fetches a new Magic card based on card name and set code.
         First checks if card already exists in database. If not,
-        card is fetched from api.scryfall.com via card_repository.
+        card is fetched from api.scryfall.com via card_repository
+        and then saved into database.
 
         Args:
             card_name (str):
@@ -120,10 +133,15 @@ class MagicService:
 
         """
 
-        # TBA: check if card exists in db
-        card = self._card_repository.fetch_card_by_name_and_set(
+        if self._card_repository.find_by_card_name(card_name):
+            raise CardExistsError(f"Card '{card_name}' exists already")
+
+        card_data = self._card_repository.fetch_card_by_name_and_set(
             card_name, set_code
         )
+        card = Card.from_scryfall_json(card_data)
+        self._card_repository.create(card)
+        # TBA: fetch and save image into /images
 
         return card
 
