@@ -33,7 +33,7 @@ venv.bak/
 # Other
 .pytest_cache
 testi.py
-images/
+images/*.png
 
 # Data files
 data/*.db

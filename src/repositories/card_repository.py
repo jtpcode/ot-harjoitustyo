@@ -156,7 +156,7 @@ class CardRepository:
         try:
             cursor.execute(
                 "SELECT * FROM Cards WHERE name = ?",
-                (card_name.lower(),)
+                (card_name,)
             )
         except DatabaseError as e:
             print("Database error in Card repository 'find_by_card_name':", e)

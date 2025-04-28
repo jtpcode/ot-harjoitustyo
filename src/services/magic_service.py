@@ -133,14 +133,14 @@ class MagicService:
         Returns:
 
         """
-        # TBA: jos käyttäjä kirjoittaa esim. devils play,
-        # sryfall palauttaa Devil's play (.lower() ei riitä)
-        if self._card_repository.find_by_card_name(card_name):
-            raise CardExistsError(f"Card '{card_name}' exists already")
 
         card_data = self._card_repository.fetch_card_by_name_and_set(
             card_name, set_code
         )
+
+        if self._card_repository.find_by_card_name(card_data["name"]):
+            raise CardExistsError(f"Card '{card_name}' exists already")
+
         card = Card.from_scryfall_json(card_data)
         self._card_repository.create(card)
         image_path = self._card_repository.save_card_image(
