@@ -54,7 +54,8 @@ class MagicCardView:
         self._show_login_view()
 
     def _submit_handler(self):
-        """Fetch and save a new card into database."""
+        """Fetch and save new card data into database
+        and save card image on disk."""
 
         set_selection = self._selected_set.get()
         if self._card_search_entry.get() == "" or set_selection not in self._all_sets:
@@ -66,10 +67,10 @@ class MagicCardView:
         magic_service = MagicService(card_repository=card_repository)
 
         try:
-            card = magic_service.fetch_card(
+            image_path = magic_service.fetch_card(
                 card_name, set_code
             )
-            print(card.name)
+            print(image_path)
         except CardExistsError as e:
             print(e)
 

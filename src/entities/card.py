@@ -94,7 +94,7 @@ class Card:
                 A new Card -object
         """
         return cls(
-            name=data.get("name"),
+            name=data.get("name").lower(),
             released_at=data.get("released_at"),
             layout=data.get("layout"),
             mana_cost=data.get("mana_cost"),

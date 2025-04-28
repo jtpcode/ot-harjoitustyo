@@ -1,3 +1,4 @@
+import json
 from entities.user import User
 from entities.card import Card
 
@@ -132,7 +133,8 @@ class MagicService:
         Returns:
 
         """
-
+        # TBA: jos käyttäjä kirjoittaa esim. devils play,
+        # sryfall palauttaa Devil's play (.lower() ei riitä)
         if self._card_repository.find_by_card_name(card_name):
             raise CardExistsError(f"Card '{card_name}' exists already")
 
@@ -141,9 +143,12 @@ class MagicService:
         )
         card = Card.from_scryfall_json(card_data)
         self._card_repository.create(card)
-        # TBA: fetch and save image into /images
+        image_path = self._card_repository.save_card_image(
+            json.loads(card.image_uris)["small"],
+            card.name
+        )
 
-        return card
+        return image_path
 
     def logout(self):
         """Logout current user."""
