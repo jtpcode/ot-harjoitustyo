@@ -197,6 +197,7 @@ class MagicCardView:
             image_path = magic_service.fetch_card(
                 card_name, set_code
             )
+            # TBA: Notification for user on success/fail
             print(image_path)
         except CardExistsError as e:
             print(e)
