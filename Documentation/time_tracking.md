@@ -17,5 +17,7 @@
 | 24.4. | 2   | Redefine card fetch logic from scryfall api |
 | 25.4. | 5   | Study card json content in scryfall api |
 | 26.4. | 4   | Add saving new card into database |
+| 28.4. | 3   | Preliminary card view functionality |
+| 29.4. | 6   | Card view stydy, improvements, error handling, add more tests |
 
-**Total hours: 56**
+**Total hours: 65**

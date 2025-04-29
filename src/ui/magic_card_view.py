@@ -6,7 +6,10 @@ from services.magic_service import MagicService, CardExistsError
 from repositories.card_repository import (
     card_repository,
     CardNotFoundError,
-    SetsNotFoundError
+    SetsNotFoundError,
+    DatabaseCreateError,
+    DatabaseFindError,
+    CardImageNotFoundError
 )
 from utils.ui_utils import center_window
 
@@ -199,9 +202,15 @@ class MagicCardView:
             print(e)
         except CardNotFoundError:
             print("Check spelling of the card name")
+        except DatabaseCreateError:
+            print("Saving card into database failed.")
+        except DatabaseFindError:
+            print("Getting card from database failed.")
+        except CardImageNotFoundError:
+            print("Fetching card image failed.")
 
-        # TBA: after adding card, fix card list update
-        # self._initialize_card_list()
+            # TBA: after adding card, fix card list update
+            # self._initialize_card_list()
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for

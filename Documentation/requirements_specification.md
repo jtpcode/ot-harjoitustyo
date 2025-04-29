@@ -25,7 +25,7 @@ At the start, the application displays a **login view**, where users can either 
 ### After Logging In
 
 - The user sees the main interface. ("done")
-- Users can add new cards to the database one at a time based on the name of the card.
+- Users can add new cards to the database one at a time based on the name of the card. ("done")
   - Each user only sees their own cards.
 - Users can search for cards using different kinds of filters, such as:
   - all cards

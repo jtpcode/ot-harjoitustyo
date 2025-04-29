@@ -36,4 +36,6 @@
 ## Week 6
 - Update docstrings
 - New card is now saved into database
-- 
+- Card view is partially working, doesn't yet dynamically update when card is added
+- CardRepository tested for "fetch_all_sets", "find_by_card_name" and "create"
+- Improved error handling in fetching cards from scryfall.com

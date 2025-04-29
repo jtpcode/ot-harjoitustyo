@@ -87,3 +87,5 @@ class TestMagicService(unittest.TestCase):
         self.magic_service.logout()
 
         self.assertEqual(self.magic_service.get_current_user(), None)
+
+    # TBA: Add test for fetch_card

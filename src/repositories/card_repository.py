@@ -15,6 +15,18 @@ class SetsNotFoundError(Exception):
     pass
 
 
+class DatabaseCreateError(Exception):
+    pass
+
+
+class DatabaseFindError(Exception):
+    pass
+
+
+class CardImageNotFoundError(Exception):
+    pass
+
+
 class CardRepository:
     """Class responsible for fetching Magic cards from api.scryfall.com
     and storing them into database.
@@ -50,7 +62,7 @@ class CardRepository:
         Returns:
             A Card object in json format.
         Raises:
-            RequestException:
+            CardNotFoundError:
         """
 
         url = "https://api.scryfall.com/cards/named"
@@ -77,7 +89,7 @@ class CardRepository:
         Returns:
             All card sets in json format.
         Raises:
-            RequestException:
+            SetsNotFoundError:
         """
 
         url = "https://api.scryfall.com/sets"
@@ -103,7 +115,7 @@ class CardRepository:
         Returns:
             Card -object
         Raises:
-            DatabaseError:
+            DatabaseCreateError:
         """
 
         cursor = self._connection.cursor()
@@ -142,7 +154,7 @@ class CardRepository:
             )
         # Generated code ends
         except DatabaseError as e:
-            print("Database error in User repository 'create':", e)
+            raise DatabaseCreateError from e
 
         self._connection.commit()
 
@@ -156,7 +168,7 @@ class CardRepository:
         Returns:
             A Card -object or None if not found.
         Raises:
-            DatabaseError:
+            DatabaseFindError:
         """
 
         cursor = self._connection.cursor()
@@ -167,7 +179,7 @@ class CardRepository:
                 (card_name,)
             )
         except DatabaseError as e:
-            print("Database error in Card repository 'find_by_card_name':", e)
+            raise DatabaseFindError from e
 
         row = cursor.fetchone()
 
@@ -186,7 +198,7 @@ class CardRepository:
         Returns:
             str: Image path.
         Raises:
-            RequestException:
+            CardImageNotFoundError:
         """
 
         # Generated code begins
@@ -201,7 +213,7 @@ class CardRepository:
             with open(image_path, "wb") as f:
                 f.write(response.content)
         except requests.exceptions.RequestException as e:
-            print(f"Error in saving card image: {e}")
+            raise CardImageNotFoundError from e
 
         return image_path
         # Generated code ends
