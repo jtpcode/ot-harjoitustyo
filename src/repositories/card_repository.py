@@ -4,7 +4,6 @@ import os
 import requests
 from utils.database.database_connection import get_database_connection
 from config import USER_AGENT
-from entities.card import Card
 
 
 class CardNotFoundError(Exception):
@@ -166,7 +165,7 @@ class CardRepository:
         Args:
             card_name (str):
         Returns:
-            A Card -object or None if not found.
+            The card name or None if not found.
         Raises:
             DatabaseFindError:
         """
@@ -184,7 +183,7 @@ class CardRepository:
         row = cursor.fetchone()
 
         if row:
-            return Card(*row[1:21])
+            return row[1]
 
         return None
 
