@@ -1,8 +1,126 @@
-from tkinter import ttk, constants, StringVar
+import os
+from tkinter import ttk, Canvas, constants, StringVar
 from ttkwidgets.autocomplete import AutocompleteCombobox
+from PIL import Image, ImageTk
 from services.magic_service import MagicService, CardExistsError
-from repositories.card_repository import card_repository
+from repositories.card_repository import card_repository, CardNotFoundError, SetsNotFoundError
 from utils.ui_utils import center_window
+
+
+class CardListView:
+    """View for listing card images."""
+
+    def __init__(self, root):
+        """Class constructor. Creates a new card list view.
+
+        Args:
+            root:
+                TKinter -element (cards_frame), which initializes the card view.
+        """
+
+        self._root = root
+        self._canvas = None
+        self._scrollbar = None
+        self._scrollable_frame = None
+        self._card_images = []
+        self._image_labels = []
+        self._images_dir = None
+        self._thumbnail_size = None
+
+        self._initialize()
+
+    def pack(self):
+        """"Shows the view."""
+
+        self._canvas.pack(side="left", fill="both", expand=True)
+        self._scrollbar.pack(side="right", fill="y")
+
+    def destroy(self):
+        """"Destroy current view with scrollbar."""
+
+        self._canvas.destroy()
+        self._scrollbar.destroy()
+
+    # generated code begins
+    def _initialize(self):
+        self._images_dir = "./images"
+        self._thumbnail_size = (100, 140)
+
+        self._canvas = Canvas(self._root)
+        self._scrollbar = ttk.Scrollbar(
+            self._root,
+            orient="vertical",
+            command=self._canvas.yview
+        )
+        self._scrollable_frame = ttk.Frame(self._canvas)
+
+        self._scrollable_frame.bind(
+            "<Configure>",
+            lambda e: self._canvas.configure(
+                scrollregion=self._canvas.bbox("all")
+            )
+        )
+
+        self._canvas.create_window(
+            (0, 0), window=self._scrollable_frame, anchor="nw"
+        )
+        self._canvas.update_idletasks()
+        self._canvas.configure(
+            scrollregion=self._canvas.bbox("all"),
+            yscrollcommand=self._scrollbar.set
+        )
+
+        self._load_card_images()
+
+        # Bind window resize event
+        self._root.bind(
+            "<Configure>", self._refresh_card_layout)
+
+    def _load_card_images(self):
+        """Loads card images into memory as thumbnails."""
+
+        self._image_labels = []
+        for filename in sorted(os.listdir(self._images_dir)):
+            if filename.lower().endswith((".png", ".jpg", ".jpeg")):
+                path = os.path.join(self._images_dir, filename)
+                img = Image.open(path)
+                img.thumbnail(self._thumbnail_size)
+                photo = ImageTk.PhotoImage(img)
+                label = ttk.Label(self._scrollable_frame, image=photo)
+
+                # Only saves reference to photo -object, so it isn't lost
+                self._card_images.append(photo)
+
+                self._image_labels.append(label)
+
+    def _refresh_card_layout(self, event=None):
+        """Dynamically creates layot for cards according to
+        current window size.
+
+        Args:
+            event: Window resize event
+        """
+
+        for label in self._image_labels:
+            label.grid_forget()
+
+        if event:
+            frame_width = event.width
+        else:
+            frame_width = self._scrollable_frame.winfo_width()
+        thumb_width = self._thumbnail_size[0]
+        max_columns = max(1, (frame_width // thumb_width)-1)
+
+        row = 0
+        col = 0
+
+        for label in self._image_labels:
+            label.grid(row=row, column=col, padx=5, pady=5)
+            col += 1
+            if col >= max_columns:
+                col = 0
+                row += 1
+    # generated code ends
 
 
 class MagicCardView:
@@ -28,10 +146,12 @@ class MagicCardView:
         self._root = root
         self._show_login_view = show_login_view
         self._frame = None
+        self._cards_frame = None
         self._card_search_entry = None
         self._all_sets = {}
         self._selected_set = None
         self._set_list_dropdown = None
+        self._card_list_view = None
 
         center_window(self._root, 800, 800)
         self._initialize()
@@ -73,6 +193,11 @@ class MagicCardView:
             print(image_path)
         except CardExistsError as e:
             print(e)
+        except CardNotFoundError:
+            print("Check spelling of the card name")
+
+        # TBA: after adding card, fix card list update
+        # self._initialize_card_list()
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
@@ -83,8 +208,11 @@ class MagicCardView:
             and value = 'code'.
         """
 
-        sets = card_repository.fetch_all_sets()
-        self._all_sets = {set["name"]: set["code"] for set in sets["data"]}
+        try:
+            sets = card_repository.fetch_all_sets()
+            self._all_sets = {set["name"]: set["code"] for set in sets["data"]}
+        except SetsNotFoundError:
+            print("All sets couldn't be loaded")
 
     def initialize_label(self, top_frame):
         title_label = ttk.Label(
@@ -160,18 +288,13 @@ class MagicCardView:
             sticky=constants.NE
         )
 
-    def initialize_show_cards(self, cards_frame):
-        instruction = ttk.Label(
-            cards_frame,
-            text="""OHJE TESTAAJALLE:
-                    käytä 'Card name' -kentässä tekstiä 'Firebolt'
-                    ja valitse 'Set name' valikosta 'Eternal masters'.
-                    Terminaaliin tulostuu kortin nimi. Voit toki käyttää
-                    mitä tahansa muutakin settiä ja siihen kuuluvaa
-                    korttia.""",
-            relief="solid"
-        )
-        instruction.pack(fill="x", pady=2)
+    def _initialize_card_list(self):
+        if self._card_list_view:
+            self._card_list_view.destroy()
+
+        self._card_list_view = CardListView(self._cards_frame)
+
+        self._card_list_view.pack()
 
     def _initialize(self):
         # Initialize dropdown menu for Set selection
@@ -202,8 +325,8 @@ class MagicCardView:
         )
 
         # Cards frame: show cards
-        cards_frame = ttk.Frame(master=self._frame)
-        cards_frame.grid(
+        self._cards_frame = ttk.Frame(master=self._frame)
+        self._cards_frame.grid(
             row=1,
             column=0,
             sticky=constants.NSEW,
@@ -214,4 +337,4 @@ class MagicCardView:
         self.initialize_label(top_frame)
         self.initialize_card_search(center_frame)
         self.initialize_logout(top_frame)
-        self.initialize_show_cards(cards_frame)
+        self._initialize_card_list()
