@@ -3,7 +3,11 @@ from tkinter import ttk, Canvas, constants, StringVar
 from ttkwidgets.autocomplete import AutocompleteCombobox
 from PIL import Image, ImageTk
 from services.magic_service import MagicService, CardExistsError
-from repositories.card_repository import card_repository, CardNotFoundError, SetsNotFoundError
+from repositories.card_repository import (
+    card_repository,
+    CardNotFoundError,
+    SetsNotFoundError
+)
 from utils.ui_utils import center_window
 
 

@@ -7,6 +7,14 @@ from config import USER_AGENT
 from entities.card import Card
 
 
+class CardNotFoundError(Exception):
+    pass
+
+
+class SetsNotFoundError(Exception):
+    pass
+
+
 class CardRepository:
     """Class responsible for fetching Magic cards from api.scryfall.com
     and storing them into database.
@@ -59,7 +67,7 @@ class CardRepository:
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            print(f"Error in fetching a card: {e}")
+            raise CardNotFoundError from e
 
         return response.json()
 
@@ -82,7 +90,7 @@ class CardRepository:
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            print(f"Error in fetching all card sets: {e}")
+            raise SetsNotFoundError from e
 
         return response.json()
 

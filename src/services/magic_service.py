@@ -131,6 +131,12 @@ class MagicService:
             card_name (str):
             set_code (str):
         Returns:
+            Path to the card image.
+        Raises:
+            CardNotFoundError:
+                Card with this name not found in scryfall.com.
+            CardExistsError:
+                Card already exists in database.
 
         """
 
