@@ -27,6 +27,7 @@ class CardListView:
 
         self._root = root
         self._frame = None
+        self._content_frame = None
         self._scrollable_frame = None
         self._card_images = []
         self._image_labels = []
@@ -38,54 +39,55 @@ class CardListView:
     def pack(self):
         """"Shows the view."""
 
-        self._frame.pack(fill=constants.X)
+        self._frame.pack(fill="both", expand=True)
 
     def destroy(self):
         """"Destroy current view."""
 
         self._frame.destroy()
 
-    # generated code begins
+    # partially generated code begins
     def _initialize(self):
         self._frame = ttk.Frame(master=self._root)
+        self._frame.grid_columnconfigure(0, weight=1)
+        self._frame.grid_rowconfigure(0, weight=1)
 
         self._images_dir = "./images"
         self._thumbnail_size = (100, 140)
 
-        canvas = Canvas(master=self._frame)
+        canvas = Canvas(master=self._frame, relief="raised")
         scrollbar = ttk.Scrollbar(
             master=self._frame,
             orient="vertical",
             command=canvas.yview
         )
-        self._scrollable_frame = ttk.Frame(canvas)
+        canvas.configure(yscrollcommand=scrollbar.set)
 
-        self._scrollable_frame.bind(
-            "<Configure>",
-            lambda e: canvas.configure(
+        self._content_frame = ttk.Frame(master=canvas)
+        canvas.create_window(
+            (0, 0),
+            window=self._content_frame,
+            anchor="nw"
+        )
+
+        canvas.grid(row=0, column=0, sticky="nsew")
+        scrollbar.grid(row=0, column=1, sticky="ns")
+
+        # Bind scrollregion and layout refresh with window resize event "<Configure>"
+        # Pylint INFO: disabled on this row, since 'event' is needed for bind!
+        def handle_configure(event):    # pylint: disable=unused-argument
+            canvas.configure(
                 scrollregion=canvas.bbox("all")
             )
-        )
+            self._refresh_card_layout()
 
-        canvas.create_window(
-            (0, 0), window=self._scrollable_frame, anchor="nw"
+        self._frame.bind(
+            "<Configure>",
+            handle_configure
         )
-        canvas.configure(
-            scrollregion=canvas.bbox("all"),
-            yscrollcommand=scrollbar.set
-        )
-
-        canvas.pack(side="left", fill="both", expand=True)
-        scrollbar.pack(side="right", fill="y")
 
         self._load_card_images()
         self._refresh_card_layout()
-
-        # Bind window resize event
-        self._root.bind(
-            "<Configure>",
-            self._refresh_card_layout
-        )
 
     def _load_card_images(self):
         """Loads card images into memory as thumbnails."""
@@ -97,9 +99,9 @@ class CardListView:
                 img = Image.open(path)
                 img.thumbnail(self._thumbnail_size)
                 photo = ImageTk.PhotoImage(img)
-                label = ttk.Label(self._scrollable_frame, image=photo)
+                label = ttk.Label(self._content_frame, image=photo)
 
-                # Only saves reference to photo -object, so it isn't lost
+                # Only saves reference to photo -objects, so it isn't lost
                 self._card_images.append(photo)
 
                 self._image_labels.append(label)
@@ -131,7 +133,7 @@ class CardListView:
             if col >= max_columns:
                 col = 0
                 row += 1
-    # generated code ends
+    # partially generated code ends
 
 
 class MagicCardView:
@@ -170,7 +172,7 @@ class MagicCardView:
     def pack(self):
         """Show current view."""
 
-        self._frame.pack(fill=constants.X)
+        self._frame.pack(fill="both", expand=True)
 
     def destroy(self):
         """Destroy current view."""
@@ -319,6 +321,7 @@ class MagicCardView:
         self.initialize_sets()
 
         self._frame = ttk.Frame(master=self._root)
+        self._frame.grid_rowconfigure(1, weight=1)
         self._frame.grid_columnconfigure(0, weight=1)
 
         # Top frame: all the tools etc.
@@ -343,6 +346,8 @@ class MagicCardView:
 
         # Cards frame: show cards
         self._cards_frame = ttk.Frame(master=self._frame)
+        self._cards_frame.grid_rowconfigure(0, weight=1)
+        self._cards_frame.grid_columnconfigure(0, weight=1)
         self._cards_frame.grid(
             row=1,
             column=0,
