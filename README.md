@@ -10,10 +10,13 @@ The application's functionality has been tested with Python version `3.13`. Issu
 
 - [Requirements Specification](./Documentation/requirements_specification.md)
 - [Architecture Description](./Documentation/architecture.md)
-- [Releases](https://github.com/jtpcode/ot-harjoitustyo/releases)
 - [Work Time Log](./Documentation/time_tracking.md)
 - [Changelog](./Documentation/changelog.md)
 - [Manual](./Documentation/manual.md)
+
+## Releases
+
+- [Latest release](https://github.com/jtpcode/ot-harjoitustyo/releases)
 
 ## Installation
 

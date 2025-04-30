@@ -26,8 +26,7 @@ class CardListView:
         """
 
         self._root = root
-        self._canvas = None
-        self._scrollbar = None
+        self._frame = None
         self._scrollable_frame = None
         self._card_images = []
         self._image_labels = []
@@ -39,49 +38,54 @@ class CardListView:
     def pack(self):
         """"Shows the view."""
 
-        self._canvas.pack(side="left", fill="both", expand=True)
-        self._scrollbar.pack(side="right", fill="y")
+        self._frame.pack(fill=constants.X)
 
     def destroy(self):
-        """"Destroy current view with scrollbar."""
+        """"Destroy current view."""
 
-        self._canvas.destroy()
-        self._scrollbar.destroy()
+        self._frame.destroy()
 
     # generated code begins
     def _initialize(self):
+        self._frame = ttk.Frame(master=self._root)
+
         self._images_dir = "./images"
         self._thumbnail_size = (100, 140)
 
-        self._canvas = Canvas(self._root)
-        self._scrollbar = ttk.Scrollbar(
-            self._root,
+        canvas = Canvas(master=self._frame)
+        scrollbar = ttk.Scrollbar(
+            master=self._frame,
             orient="vertical",
-            command=self._canvas.yview
+            command=canvas.yview
         )
-        self._scrollable_frame = ttk.Frame(self._canvas)
+        self._scrollable_frame = ttk.Frame(canvas)
 
         self._scrollable_frame.bind(
             "<Configure>",
-            lambda e: self._canvas.configure(
-                scrollregion=self._canvas.bbox("all")
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
             )
         )
 
-        self._canvas.create_window(
+        canvas.create_window(
             (0, 0), window=self._scrollable_frame, anchor="nw"
         )
-        self._canvas.update_idletasks()
-        self._canvas.configure(
-            scrollregion=self._canvas.bbox("all"),
-            yscrollcommand=self._scrollbar.set
+        canvas.configure(
+            scrollregion=canvas.bbox("all"),
+            yscrollcommand=scrollbar.set
         )
 
+        canvas.pack(side="left", fill="both", expand=True)
+        scrollbar.pack(side="right", fill="y")
+
         self._load_card_images()
+        self._refresh_card_layout()
 
         # Bind window resize event
         self._root.bind(
-            "<Configure>", self._refresh_card_layout)
+            "<Configure>",
+            self._refresh_card_layout
+        )
 
     def _load_card_images(self):
         """Loads card images into memory as thumbnails."""
@@ -114,7 +118,7 @@ class CardListView:
         if event:
             frame_width = event.width
         else:
-            frame_width = self._scrollable_frame.winfo_width()
+            frame_width = self._root.winfo_width()
         thumb_width = self._thumbnail_size[0]
         max_columns = max(1, (frame_width // thumb_width)-1)
 
@@ -210,8 +214,8 @@ class MagicCardView:
         except CardImageNotFoundError:
             print("Fetching card image failed.")
 
-            # TBA: after adding card, fix card list update
-            # self._initialize_card_list()
+        # TBA: after adding card, fix card list update
+        self._initialize_card_list()
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
@@ -316,7 +320,6 @@ class MagicCardView:
 
         self._frame = ttk.Frame(master=self._root)
         self._frame.grid_columnconfigure(0, weight=1)
-        self._frame.grid_rowconfigure(1, weight=1)
 
         # Top frame: all the tools etc.
         top_frame = ttk.Frame(master=self._frame)
