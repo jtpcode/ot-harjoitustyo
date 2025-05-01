@@ -19,5 +19,7 @@
 | 26.4. | 4   | Add saving new card into database |
 | 28.4. | 3   | Preliminary card view functionality |
 | 29.4. | 6   | Card view stydy, improvements, error handling, add more tests |
+| 30.4. | 4   | Card view: fix dynamic refresh after adding card |
+| 1.5. | 6   | New tests for CardRepository and MagicService |
 
-**Total hours: 65**
+**Total hours: 74**

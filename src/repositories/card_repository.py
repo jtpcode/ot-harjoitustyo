@@ -59,7 +59,7 @@ class CardRepository:
             card_name (str):
             set_code (str):
         Returns:
-            A Card object in json format.
+            Card data in dict format.
         Raises:
             CardNotFoundError:
         """
@@ -86,7 +86,7 @@ class CardRepository:
         """Fetches all available card sets.
 
         Returns:
-            All card sets in json format.
+            All card sets in dict format.
         Raises:
             SetsNotFoundError:
         """

@@ -39,3 +39,10 @@
 - Card view is partially working, doesn't yet dynamically update when card is added
 - CardRepository tested for "fetch_all_sets", "find_by_card_name" and "create"
 - Improved error handling in fetching cards from scryfall.com
+
+## Week 7
+- Card view dynamic update after adding a new card
+- Card view react correctly to window resize
+- CardRepository tested for "save_card_image"
+- MagicService tested for "get_current_user", "fetch_card"
+- 

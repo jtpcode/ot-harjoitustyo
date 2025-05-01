@@ -3,13 +3,13 @@ from unittest.mock import patch, Mock, mock_open
 import os
 import requests.exceptions
 from utils.database.initialize_database import initialize_database
+from utils import test_utils
 from repositories.card_repository import (
     card_repository,
     CardNotFoundError,
     SetsNotFoundError,
     CardImageNotFoundError
 )
-from entities.card import Card, CardStats
 
 
 class TestCardRepository(unittest.TestCase):
@@ -17,41 +17,7 @@ class TestCardRepository(unittest.TestCase):
         self.mock_response = Mock()
         initialize_database()
 
-        stats = CardStats(
-            mana_cost="{3}{R}{R}",
-            cmc=5.0,
-            power="4",
-            toughness="4",
-            colors=["Red"],
-            color_identity=["R"]
-        )
-
-        self.fake_card = Card(
-            name="Test_Dragon",
-            released_at="2025-04-01",
-            layout="normal",
-            stats=stats,
-            type_line="Creature — Dragon",
-            oracle_text="When enters, deals 3 damage to opponent",
-            keywords=["Flying"],
-            card_faces=None,
-            all_parts=None,
-            image_uris={
-                "small": "https://example.com/card_small.jpg",
-                "normal": "https://example.com/card_normal.jpg",
-                "large": "https://example.com/card_large.jpg"
-            },
-            set_code="TST",
-            set_name="Test_set",
-            rarity="rare",
-            flavor_text="Fake text here.",
-            prices={
-                "usd": "0.99",
-                "usd_foil": "1.49",
-                "eur": "0.89",
-                "eur_foil": "1.29"
-            }
-        )
+        self.fake_card = test_utils.create_fake_magic_card()
         card_repository.create(self.fake_card)
 
     @patch("repositories.card_repository.requests.get")
