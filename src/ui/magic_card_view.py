@@ -101,7 +101,7 @@ class CardListView:
                 photo = ImageTk.PhotoImage(img)
                 label = ttk.Label(self._content_frame, image=photo)
 
-                # Only saves reference to photo -objects, so it isn't lost
+                # Only saves reference to photo -objects, so they arent't lost
                 self._card_images.append(photo)
 
                 self._image_labels.append(label)
@@ -117,18 +117,21 @@ class CardListView:
         for label in self._image_labels:
             label.grid_forget()
 
-        if event:
-            frame_width = event.width
-        else:
-            frame_width = self._root.winfo_width()
-        thumb_width = self._thumbnail_size[0]
-        max_columns = max(1, (frame_width // thumb_width)-1)
+        # HACK: frame_width is shortened 50 units to compensate for scrollbar
+        # and windows margins, since it's challenging to get self._content_frame
+        # width reliably
+        frame_width = (event.width if event else self._root.winfo_width()) - 50
+        padding = 2
+        thumb_width = self._thumbnail_size[0] + 2*padding
+        max_columns = max(1, ((frame_width) // thumb_width))
+        print(frame_width, thumb_width, max_columns*thumb_width,
+              frame_width-max_columns*thumb_width, max_columns)
 
         row = 0
         col = 0
 
         for label in self._image_labels:
-            label.grid(row=row, column=col, padx=5, pady=5)
+            label.grid(row=row, column=col, padx=padding, pady=padding)
             col += 1
             if col >= max_columns:
                 col = 0
@@ -160,7 +163,7 @@ class MagicCardView:
         self._show_login_view = show_login_view
         self._frame = None
         self._cards_frame = None
-        self._card_search_entry = None
+        self._card_name_entry = None
         self._all_sets = {}
         self._selected_set = None
         self._set_list_dropdown = None
@@ -191,10 +194,10 @@ class MagicCardView:
         and save card image on disk."""
 
         set_selection = self._selected_set.get()
-        if self._card_search_entry.get() == "" or set_selection not in self._all_sets:
+        if self._card_name_entry.get() == "" or set_selection not in self._all_sets:
             return
 
-        card_name = self._card_search_entry.get()
+        card_name = self._card_name_entry.get()
         set_code = self._all_sets[set_selection]
 
         magic_service = MagicService(card_repository=card_repository)
@@ -248,9 +251,9 @@ class MagicCardView:
         )
 
     def initialize_card_search(self, center_frame):
-        card_search_label = ttk.Label(master=center_frame, text="Card name : ")
+        card_name_label = ttk.Label(master=center_frame, text="Card name : ")
         select_set_label = ttk.Label(master=center_frame, text="Set name : ")
-        self._card_search_entry = ttk.Entry(master=center_frame, width=30)
+        self._card_name_entry = ttk.Entry(master=center_frame, width=30)
         self._selected_set = StringVar(center_frame)
         self._set_list_dropdown = AutocompleteCombobox(
             master=center_frame,
@@ -264,12 +267,12 @@ class MagicCardView:
             command=self._submit_handler
         )
 
-        card_search_label.grid(
+        card_name_label.grid(
             row=0,
             column=0,
             padx=5
         )
-        self._card_search_entry.grid(
+        self._card_name_entry.grid(
             row=0,
             column=1,
             padx=5
@@ -278,20 +281,20 @@ class MagicCardView:
             row=1,
             column=0,
             padx=5,
-            pady=(10, 5)
+            pady=(10, 15)
         )
         self._set_list_dropdown.grid(
             row=1,
             column=1,
             padx=5,
-            pady=(10, 5),
+            pady=(10, 15),
             sticky=constants.W
         )
         submit_button.grid(
             row=1,
             column=2,
             padx=10,
-            pady=(10, 5)
+            pady=(10, 15)
         )
 
     def initialize_logout(self, top_frame):
