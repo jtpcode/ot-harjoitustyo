@@ -55,7 +55,7 @@ class CardListView:
         self._images_dir = "./images"
         self._thumbnail_size = (100, 140)
 
-        canvas = Canvas(master=self._frame, relief="raised")
+        canvas = Canvas(master=self._frame)
         scrollbar = ttk.Scrollbar(
             master=self._frame,
             orient="vertical",
@@ -74,16 +74,16 @@ class CardListView:
         scrollbar.grid(row=0, column=1, sticky="ns")
 
         # Bind scrollregion and layout refresh with window resize event "<Configure>"
-        # Pylint INFO: disabled on this row, since 'event' is needed for bind!
-        def handle_configure(event):    # pylint: disable=unused-argument
-            canvas.configure(
+        # NOTE: These binds need to be in different frames for scrollbar to work
+        self._content_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
                 scrollregion=canvas.bbox("all")
             )
-            self._refresh_card_layout()
-
+        )
         self._frame.bind(
             "<Configure>",
-            handle_configure
+            self._refresh_card_layout
         )
 
         self._load_card_images()
