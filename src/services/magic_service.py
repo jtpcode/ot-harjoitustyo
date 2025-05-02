@@ -143,9 +143,10 @@ class MagicService:
         card_data = self._card_repository.fetch_card_by_name_and_set(
             card_name, set_code
         )
+        card_actual_name = card_data["name"]
 
-        if self._card_repository.find_by_card_name(card_data["name"]):
-            raise CardExistsError(f"Card '{card_name}' exists already")
+        if self._card_repository.find_by_card_name(card_actual_name):
+            raise CardExistsError(f"Card '{card_actual_name}' exists already")
 
         card = Card.from_scryfall_json(card_data)
         self._card_repository.create(card)

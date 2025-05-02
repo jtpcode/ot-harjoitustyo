@@ -1,5 +1,5 @@
 import os
-from tkinter import ttk, Canvas, constants, StringVar
+from tkinter import ttk, Canvas, constants, StringVar, messagebox
 from ttkwidgets.autocomplete import AutocompleteCombobox
 from PIL import Image, ImageTk
 from services.magic_service import MagicService, CardExistsError
@@ -117,15 +117,13 @@ class CardListView:
         for label in self._image_labels:
             label.grid_forget()
 
-        # HACK: frame_width is shortened 50 units to compensate for scrollbar
+        # HACK: frame_width is shortened 40 units to compensate for scrollbar
         # and windows margins, since it's challenging to get self._content_frame
         # width reliably
-        frame_width = (event.width if event else self._root.winfo_width()) - 50
+        frame_width = (event.width if event else self._root.winfo_width()) - 40
         padding = 2
         thumb_width = self._thumbnail_size[0] + 2*padding
         max_columns = max(1, ((frame_width) // thumb_width))
-        print(frame_width, thumb_width, max_columns*thumb_width,
-              frame_width-max_columns*thumb_width, max_columns)
 
         row = 0
         col = 0
@@ -167,6 +165,8 @@ class MagicCardView:
         self._all_sets = {}
         self._selected_set = None
         self._set_list_dropdown = None
+        self._message_label = None
+        self._message_variable = None
         self._card_list_view = None
 
         center_window(self._root, 800, 800)
@@ -203,24 +203,25 @@ class MagicCardView:
         magic_service = MagicService(card_repository=card_repository)
 
         try:
-            image_path = magic_service.fetch_card(
-                card_name, set_code
-            )
-            # TBA: Notification for user on success/fail
-            print(image_path)
+            magic_service.fetch_card(card_name, set_code)
+            self._show_message("Card added to collection")
+            self._card_name_entry.delete(0, 'end')
+            self._card_name_entry.focus_set()
+            self._initialize_card_list()
         except CardExistsError as e:
-            print(e)
-        except CardNotFoundError:
-            print("Check spelling of the card name")
-        except DatabaseCreateError:
-            print("Saving card into database failed.")
-        except DatabaseFindError:
-            print("Getting card from database failed.")
-        except CardImageNotFoundError:
-            print("Fetching card image failed.")
+            messagebox.showinfo("Info", e)
+        except CardNotFoundError as e:
+            messagebox.showerror("Error", e)
+        except DatabaseCreateError as e:
+            messagebox.showerror("Error", e)
+        except DatabaseFindError as e:
+            messagebox.showerror("Error", e)
+        except CardImageNotFoundError as e:
+            messagebox.showerror("Error", e)
 
-        # TBA: after adding card, fix card list update
-        self._initialize_card_list()
+    def _show_message(self, message):
+        self._message_variable.set(message)
+        self._message_label.grid()
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
@@ -234,8 +235,8 @@ class MagicCardView:
         try:
             sets = card_repository.fetch_all_sets()
             self._all_sets = {set["name"]: set["code"] for set in sets["data"]}
-        except SetsNotFoundError:
-            print("All sets couldn't be loaded")
+        except SetsNotFoundError as e:
+            messagebox.showerror("Error", e)
 
     def initialize_label(self, top_frame):
         title_label = ttk.Label(
@@ -266,6 +267,7 @@ class MagicCardView:
             text="Submit",
             command=self._submit_handler
         )
+        self._message_variable = StringVar(center_frame)
 
         card_name_label.grid(
             row=0,
@@ -281,20 +283,31 @@ class MagicCardView:
             row=1,
             column=0,
             padx=5,
-            pady=(10, 15)
+            pady=(10, 5)
         )
         self._set_list_dropdown.grid(
             row=1,
             column=1,
             padx=5,
-            pady=(10, 15),
+            pady=(10, 5),
             sticky=constants.W
         )
         submit_button.grid(
             row=1,
             column=2,
             padx=10,
-            pady=(10, 15)
+            pady=(10, 5)
+        )
+
+        self._message_label = ttk.Label(
+            master=center_frame,
+            textvariable=self._message_variable,
+            foreground="green"
+        )
+        self._message_label.grid(
+            row=2,
+            column=1,
+            pady=(2, 0)
         )
 
     def initialize_logout(self, top_frame):

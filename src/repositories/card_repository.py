@@ -78,7 +78,9 @@ class CardRepository:
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            raise CardNotFoundError from e
+            raise CardNotFoundError(
+                "Incorrect card name or set."
+            ) from e
 
         return response.json()
 
@@ -101,7 +103,7 @@ class CardRepository:
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            raise SetsNotFoundError from e
+            raise SetsNotFoundError("All sets couldn't be loaded") from e
 
         return response.json()
 
@@ -153,7 +155,9 @@ class CardRepository:
             )
         # Generated code ends
         except DatabaseError as e:
-            raise DatabaseCreateError from e
+            raise DatabaseCreateError(
+                "Saving card into database failed."
+            ) from e
 
         self._connection.commit()
 
@@ -178,7 +182,9 @@ class CardRepository:
                 (card_name,)
             )
         except DatabaseError as e:
-            raise DatabaseFindError from e
+            raise DatabaseFindError(
+                "Getting card from database failed."
+            ) from e
 
         row = cursor.fetchone()
 
@@ -212,7 +218,7 @@ class CardRepository:
             with open(image_path, "wb") as f:
                 f.write(response.content)
         except requests.exceptions.RequestException as e:
-            raise CardImageNotFoundError from e
+            raise CardImageNotFoundError("Fetching card image failed.") from e
 
         return image_path
         # Generated code ends

@@ -130,18 +130,6 @@ class LoginView:
         )
         self._error_label.pack(pady=(10, 0))
 
-        # INFO for tester only!
-        info_tester_label = ttk.Label(
-            master=self._frame,
-            font=("Arial", 10, "bold"),
-            text="""TESTAAJALLE: Kortin lisäys ei vielä automaattisesti
-            päivitä korttinäkymää, pitää logata ulos ja sisään. Tämä
-            korjataan seuraavaan versioon, kuten myös rikkonainen
-            korttinäkymän asettelu."""
-        )
-        info_tester_label.pack(pady=(20, 20))
-        # INFO for tester only!
-
         new_user_label = ttk.Label(
             master=self._frame,
             text="New user? Create an account here:"
