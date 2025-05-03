@@ -66,6 +66,35 @@ class UserRepository:
 
         if row:
             return User(row[1], row[2])
+
+        return None
+
+    def get_user_id(self, username):
+        """Returns users database id.
+
+        Args:
+            username (str):
+        Returns:
+            The user id or None if not found.
+        Raises:
+            DatabaseError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT id FROM Users WHERE username = ?",
+                (username,)
+            )
+        except DatabaseError as e:
+            print("Database error in User repository 'get_user_id':", e)
+
+        row = cursor.fetchone()
+
+        if row:
+            return row[0]
+
         return None
 
     def create(self, user):

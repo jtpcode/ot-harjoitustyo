@@ -1,4 +1,10 @@
 import json
+from repositories.user_repository import (
+    user_repository as default_user_repository
+)
+from repositories.card_repository import (
+    card_repository as default_card_repository
+)
 from entities.user import User
 from entities.card import Card
 
@@ -38,7 +44,11 @@ class MagicService:
             and database actions. Defaults to None.
     """
 
-    def __init__(self, user_repository=None, card_repository=None):
+    def __init__(
+        self,
+        user_repository=default_user_repository,
+        card_repository=default_card_repository
+    ):
         """Class constructor. Creates a new service for the application logic.
 
         Args:
@@ -121,11 +131,28 @@ class MagicService:
 
         return user
 
+    def get_user_card_filenames(self, username):
+        card_names = self._card_repository.get_user_card_names(username)
+
+        return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
+
+    def assign_card_to_user(self, username, card_name):
+        user_id = self._user_repository.get_user_id(username)
+        card_id = self._card_repository.get_card_id(card_name)
+        self._card_repository.add_card_to_user(
+            user_id,
+            card_id
+        )
+
     def fetch_card(self, card_name, set_code):
         """Fetches a new Magic card based on card name and set code.
-        First checks if card already exists in database. If not,
-        card is fetched from api.scryfall.com via card_repository
-        and then saved into database.
+        First fetches the card data from api.scryfall.com, because the api
+        can handle different spellings for the card name, like exclude
+        commas and apostrophies (ie. hunters talent = Hunter's Talent). 
+
+        Then checks if the card already exists in local database and if so,
+        does the current user have it already. If the card is not in the
+        database, it is saved there.
 
         Args:
             card_name (str):
@@ -133,8 +160,6 @@ class MagicService:
         Returns:
             Path to the card image.
         Raises:
-            CardNotFoundError:
-                Card with this name not found in scryfall.com.
             CardExistsError:
                 Card already exists in database.
 
@@ -143,21 +168,28 @@ class MagicService:
         card_data = self._card_repository.fetch_card_by_name_and_set(
             card_name, set_code
         )
-        card_actual_name = card_data["name"]
+        card_precise_name = card_data["name"]
+        current_username = self.get_current_user().username
 
-        if self._card_repository.find_by_card_name(card_actual_name):
-            raise CardExistsError(f"Card '{card_actual_name}' exists already")
+        if self._card_repository.find_by_card_name(card_precise_name):
+            if self._card_repository.user_has_card(current_username, card_precise_name):
+                raise CardExistsError(
+                    f"Card '{card_precise_name}' is already in collection"
+                )
+        else:
+            card = Card.from_scryfall_json(card_data)
+            self._card_repository.create(card)
+            self._card_repository.save_card_image(
+                json.loads(card.image_uris)["small"],
+                card.name
+            )
 
-        card = Card.from_scryfall_json(card_data)
-        self._card_repository.create(card)
-        image_path = self._card_repository.save_card_image(
-            json.loads(card.image_uris)["small"],
-            card.name
-        )
-
-        return image_path
+        self.assign_card_to_user(current_username, card_precise_name)
 
     def logout(self):
         """Logout current user."""
 
         self._user = None
+
+
+magic_service = MagicService()

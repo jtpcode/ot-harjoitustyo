@@ -119,4 +119,43 @@ class Card:
                 "flavor_text") if "flavor_text" in data else None,
             prices=json.dumps(data.get("prices")) if "prices" in data else None
         )
+
+    @classmethod
+    def from_database(cls, data):
+        """Creates a new Card -object based on card data in local database.
+
+        Args:
+            data (sqlite3.Row):
+                All card fields in dict-like object.
+
+        Returns:
+                A new Card -object
+        """
+
+        stats = CardStats(
+            mana_cost=data["mana_cost"],
+            cmc=data["cmc"],
+            power=data["power"],
+            toughness=data["toughness"],
+            colors=json.loads(data["colors"]),
+            color_identity=json.loads(data["color_identity"]),
+        )
+
+        return cls(
+            name=data["name"],
+            released_at=data["released_at"],
+            layout=data["layout"],
+            stats=stats,
+            type_line=data["type_line"],
+            oracle_text=data["oracle_text"],
+            keywords=json.loads(data["keywords"]),
+            card_faces=json.loads(data["card_faces"]),
+            all_parts=json.loads(data["all_parts"]),
+            image_uris=json.loads(data["image_uris"]),
+            set_code=data["set_code"],
+            set_name=data["set_name"],
+            rarity=data["rarity"],
+            flavor_text=data["flavor_text"],
+            prices=json.loads(data["prices"])
+        )
 # Generated code ends

@@ -43,6 +43,8 @@
 ## Week 7
 - Card view dynamic update after adding a new card
 - Card view react correctly to window resize
+- Only show cards owned by current user
 - CardRepository tested for "save_card_image"
 - MagicService tested for "get_current_user", "fetch_card"
+- Add notifications for user when adding new cards
 - 

@@ -11,8 +11,11 @@ def drop_tables(connection):
 
     cursor = connection.cursor()
 
+    # NOTE: Drops UserCards first, since it depends on Users
+    # and Cards (otherwise error will occur)
     cursor.executescript("""
         BEGIN;
+        DROP TABLE IF EXISTS UserCards;
         DROP TABLE IF EXISTS Users;
         DROP TABLE IF EXISTS Cards;
         COMMIT;
@@ -58,6 +61,13 @@ def create_tables(connection):
             rarity TEXT,
             flavor_text TEXT,
             prices JSON
+        );
+        CREATE TABLE UserCards (
+            user_id INTEGER NOT NULL,
+            card_id INTEGER NOT NULL,
+            PRIMARY KEY (user_id, card_id),
+            FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE,
+            FOREIGN KEY (card_id) REFERENCES Cards(id) ON DELETE CASCADE
         );
         COMMIT;
     """)

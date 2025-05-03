@@ -1,6 +1,5 @@
 from tkinter import ttk, StringVar
-from repositories.user_repository import user_repository
-from services.magic_service import MagicService, InvalidUsernameError, InvalidPasswordError
+from services.magic_service import magic_service, InvalidUsernameError, InvalidPasswordError
 from utils.ui_utils import center_window
 
 
@@ -60,7 +59,6 @@ class LoginView:
 
         username = self._username_entry.get()
         password = self._password_entry.get()
-        magic_service = MagicService(user_repository=user_repository)
 
         try:
             magic_service.login(username, password)

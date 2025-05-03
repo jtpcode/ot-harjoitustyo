@@ -1,8 +1,7 @@
 from tkinter import ttk, StringVar
-from repositories.user_repository import user_repository
 from utils.ui_utils import center_window
 from services.magic_service import (
-    MagicService,
+    magic_service,
     UsernameExistsError,
     UsernameTooShortError,
     PasswordTooShortError
@@ -56,7 +55,6 @@ class CreateUserView:
 
         username = self._new_username_entry.get()
         password = self._new_password_entry.get()
-        magic_service = MagicService(user_repository=user_repository)
 
         try:
             magic_service.create_user(username, password)

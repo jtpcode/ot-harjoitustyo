@@ -21,5 +21,7 @@
 | 29.4. | 6   | Card view stydy, improvements, error handling, add more tests |
 | 30.4. | 4   | Card view: fix dynamic refresh after adding card |
 | 1.5. | 6   | New tests for CardRepository and MagicService |
+| 2.5. | 5   | Add notifications for user when adding new cards, other tweaks |
+| 3.5. | 6   | Only show cards owned by current user, change database accordingly |
 
-**Total hours: 74**
+**Total hours: 85**

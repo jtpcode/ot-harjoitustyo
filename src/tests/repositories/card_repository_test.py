@@ -70,9 +70,9 @@ class TestCardRepository(unittest.TestCase):
         self.assertEqual(self.fake_card.name, card.name)
 
     def test_find_by_card_name(self):
-        card_name = card_repository.find_by_card_name("Test_Dragon")
+        card = card_repository.find_by_card_name("Test_Dragon")
 
-        self.assertEqual(card_name, self.fake_card.name)
+        self.assertEqual(card.name, self.fake_card.name)
 
     @patch("repositories.card_repository.requests.get")
     @patch("repositories.card_repository.open", new_callable=mock_open)

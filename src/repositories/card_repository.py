@@ -2,6 +2,7 @@ from sqlite3 import DatabaseError
 import json
 import os
 import requests
+from entities.card import Card
 from utils.database.database_connection import get_database_connection
 from config import USER_AGENT
 
@@ -163,13 +164,41 @@ class CardRepository:
 
         return card
 
+    def get_card_id(self, card_name):
+        """Returns cards database id.
+
+        Args:
+            card_name (str):
+        Returns:
+            The card id or None if not found.
+        Raises:
+            DatabaseError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                "SELECT id FROM Cards WHERE name = ?",
+                (card_name,)
+            )
+        except DatabaseError as e:
+            print("Database error in Card repository 'get_card_id':", e)
+
+        row = cursor.fetchone()
+
+        if row:
+            return row[0]
+
+        return None
+
     def find_by_card_name(self, card_name):
         """Returns a specific card.
 
         Args:
             card_name (str):
         Returns:
-            The card name or None if not found.
+            A Card -object or None if not found.
         Raises:
             DatabaseFindError:
         """
@@ -189,9 +218,108 @@ class CardRepository:
         row = cursor.fetchone()
 
         if row:
-            return row[1]
+            return Card.from_database(row)
 
         return None
+
+    def get_user_card_names(self, username):
+        """Gets names of the cards owned by the user.
+
+        Args:
+            username (str):
+        Returns:
+            List of card names owned by the user,
+            None if not found.
+        Raises:
+            DatabaseFindError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                """SELECT c.name
+                FROM Users u
+                LEFT JOIN UserCards uc ON u.id = uc.user_id
+                LEFT JOIN Cards c ON c.id = uc.card_id
+                WHERE u.username = ?""",
+                (username,)
+            )
+        except DatabaseError as e:
+            raise DatabaseFindError(
+                "Getting users card names from database failed."
+            ) from e
+
+        rows = cursor.fetchall()
+
+        if rows:
+            return [row[0] for row in rows]
+
+        return None
+
+    def user_has_card(self, username, card_name):
+        """Returns true of false based on whether current
+        user already has the card in collection.
+
+        Args:
+            username (str):
+            card_name (str):
+        Returns:
+            True or false.
+        Raises:
+            DatabaseFindError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                """SELECT uc.card_id
+                FROM Users u
+                LEFT JOIN UserCards uc ON u.id = uc.user_id
+                LEFT JOIN Cards c ON c.id = uc.card_id
+                WHERE u.username = ? AND c.name = ?""",
+                (username, card_name)
+            )
+        except DatabaseError as e:
+            raise DatabaseFindError(
+                "Getting card from database failed."
+            ) from e
+
+        row = cursor.fetchone()
+
+        if row:
+            return True
+
+        return False
+
+    def add_card_to_user(self, user_id, card_id):
+        """Add a new card into database for current user.
+
+        Args:
+            username (str):
+            card_name (str):
+        Returns:
+            True if success.
+        Raises:
+            DatabaseCreateError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute("""
+                INSERT INTO UserCards (user_id, card_id)
+                VALUES (?, ?)""", (user_id, card_id)
+                           )
+        except DatabaseError as e:
+            raise DatabaseCreateError(
+                "Saving card for current user in database failed."
+            ) from e
+
+        self._connection.commit()
+
+        return True
 
     def save_card_image(self, image_uri, card_name, save_dir="images"):
         """Saves card image into /images -folder

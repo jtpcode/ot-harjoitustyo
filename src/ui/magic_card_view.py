@@ -2,7 +2,7 @@ import os
 from tkinter import ttk, Canvas, constants, StringVar, messagebox
 from ttkwidgets.autocomplete import AutocompleteCombobox
 from PIL import Image, ImageTk
-from services.magic_service import MagicService, CardExistsError
+from services.magic_service import magic_service, CardExistsError
 from repositories.card_repository import (
     card_repository,
     CardNotFoundError,
@@ -26,6 +26,7 @@ class CardListView:
         """
 
         self._root = root
+        self._user = magic_service.get_current_user()
         self._frame = None
         self._content_frame = None
         self._scrollable_frame = None
@@ -93,7 +94,10 @@ class CardListView:
         """Loads card images into memory as thumbnails."""
 
         self._image_labels = []
-        for filename in sorted(os.listdir(self._images_dir)):
+        image_filenames = magic_service.get_user_card_filenames(
+            self._user.username
+        )
+        for filename in sorted(image_filenames):
             if filename.lower().endswith((".png", ".jpg", ".jpeg")):
                 path = os.path.join(self._images_dir, filename)
                 img = Image.open(path)
@@ -117,7 +121,7 @@ class CardListView:
         for label in self._image_labels:
             label.grid_forget()
 
-        # HACK: frame_width is shortened 40 units to compensate for scrollbar
+        # HACK: frame_width is shortened by 40 units to compensate for scrollbar
         # and windows margins, since it's challenging to get self._content_frame
         # width reliably
         frame_width = (event.width if event else self._root.winfo_width()) - 40
@@ -159,6 +163,7 @@ class MagicCardView:
 
         self._root = root
         self._show_login_view = show_login_view
+        self._user = magic_service.get_current_user()
         self._frame = None
         self._cards_frame = None
         self._card_name_entry = None
@@ -185,7 +190,6 @@ class MagicCardView:
     def _logout_handler(self):
         """Logout current user."""
 
-        magic_service = MagicService()
         magic_service.logout()
         self._show_login_view()
 
@@ -199,8 +203,6 @@ class MagicCardView:
 
         card_name = self._card_name_entry.get()
         set_code = self._all_sets[set_selection]
-
-        magic_service = MagicService(card_repository=card_repository)
 
         try:
             magic_service.fetch_card(card_name, set_code)
