@@ -39,7 +39,7 @@ class UserRepository:
 
         rows = cursor.fetchall()
 
-        return [User(row[1], row[2]) for row in rows]
+        return [User(row[1], row[2], row[0]) for row in rows]
 
     def find_by_username(self, username):
         """Returns a specific user.
@@ -65,7 +65,7 @@ class UserRepository:
         row = cursor.fetchone()
 
         if row:
-            return User(row[1], row[2])
+            return User(row[1], row[2], row[0])
 
         return None
 

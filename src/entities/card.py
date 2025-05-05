@@ -33,12 +33,14 @@ class Card:
         rarity (str): Rarity.
         flavor_text (str): Flavor text.
         prices (dict): Prices.
+        card_id (int): Id (primary key) in database. Defaults to None.
     """
 
     def __init__(self, name, released_at, layout, stats,
                  type_line, oracle_text, keywords,
                  card_faces, all_parts, image_uris,
-                 set_code, set_name, rarity, flavor_text, prices):
+                 set_code, set_name, rarity, flavor_text,
+                 prices, card_id=None):
         """Class Constructor, creates a new card object.
 
         Attributes:
@@ -57,6 +59,7 @@ class Card:
             rarity (str): Rarity.
             flavor_text (str): Flavor text.
             prices (dict): Prices.
+            card_id (int): Id (primary key) in database. Defaults to None.
         """
 
         self.name = name
@@ -74,6 +77,7 @@ class Card:
         self.rarity = rarity
         self.flavor_text = flavor_text
         self.prices = prices
+        self.card_id = card_id
 
     @classmethod
     def from_scryfall_json(cls, data):
@@ -156,6 +160,7 @@ class Card:
             set_name=data["set_name"],
             rarity=data["rarity"],
             flavor_text=data["flavor_text"],
-            prices=json.loads(data["prices"])
+            prices=json.loads(data["prices"]),
+            card_id=data["id"]
         )
 # Generated code ends
