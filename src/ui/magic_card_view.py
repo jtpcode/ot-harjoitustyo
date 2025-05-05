@@ -224,6 +224,10 @@ class MagicCardView:
     def _show_message(self, message):
         self._message_variable.set(message)
         self._message_label.grid()
+        self._message_label.after(3000, self._hide_message)
+
+    def _hide_message(self):
+        self._show_message("")
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
@@ -301,6 +305,7 @@ class MagicCardView:
             pady=(10, 5)
         )
 
+        # Notification of successful card addition
         self._message_label = ttk.Label(
             master=center_frame,
             textvariable=self._message_variable,

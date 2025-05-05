@@ -136,7 +136,7 @@ class MagicService:
 
         return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
 
-    def assign_card_to_user(self, user_id, card_id):
+    def _assign_card_to_user(self, user_id, card_id):
         self._card_repository.add_card_to_user(
             user_id,
             card_id
@@ -164,10 +164,14 @@ class MagicService:
         """
 
         card_data = self._card_repository.fetch_card_by_name_and_set(
-            card_name, set_code
+            card_name,
+            set_code
         )
         card_precise_name = card_data["name"]
-        card = self._card_repository.find_by_card_name(card_precise_name)
+        card = self._card_repository.find_card_by_name_and_set(
+            card_precise_name,
+            set_code
+        )
 
         if card:
             card_id = card.card_id
@@ -183,7 +187,7 @@ class MagicService:
                 card.name
             )
 
-        self.assign_card_to_user(self._user.user_id, card_id)
+        self._assign_card_to_user(self._user.user_id, card_id)
 
     def logout(self):
         """Logout current user."""

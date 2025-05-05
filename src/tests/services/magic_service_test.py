@@ -103,7 +103,7 @@ class TestMagicService(unittest.TestCase):
         self.card_repository_mock.fetch_card_by_name_and_set.return_value = {
             "name": "Fake Card"
         }
-        self.card_repository_mock.find_by_card_name.return_value = None
+        self.card_repository_mock.find_card_by_name_and_set.return_value = None
         mock_from_scryfall_json.return_value = self.fake_card
 
         expected_image_path = os.path.join("images", "fake_card.png")
@@ -119,7 +119,7 @@ class TestMagicService(unittest.TestCase):
         self.card_repository_mock.fetch_card_by_name_and_set.return_value = {
             "name": "Fake Card"
         }
-        self.card_repository_mock.find_by_card_name.return_value = "Fake Card"
+        self.card_repository_mock.find_card_by_name_and_set.return_value = "Fake Card"
 
         self.assertRaises(
             CardExistsError,

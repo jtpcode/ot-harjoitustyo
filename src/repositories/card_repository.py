@@ -164,11 +164,12 @@ class CardRepository:
 
         return cursor.lastrowid
 
-    def find_by_card_name(self, card_name):
-        """Returns a specific card.
+    def find_card_by_name_and_set(self, card_name, set_code):
+        """Returns a specific card based on name and card set.
 
         Args:
             card_name (str):
+            set_code (str): The code of the card set.
         Returns:
             A Card -object or None if not found.
         Raises:
@@ -179,8 +180,9 @@ class CardRepository:
 
         try:
             cursor.execute(
-                "SELECT * FROM Cards WHERE name = ?",
-                (card_name,)
+                """SELECT * FROM Cards
+                WHERE name = ? AND set_code = ?""",
+                (card_name, set_code)
             )
         except DatabaseError as e:
             raise DatabaseFindError(
