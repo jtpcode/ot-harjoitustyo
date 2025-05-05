@@ -18,4 +18,4 @@ class User:
 
         self.username = username
         self.password = password
-        self.id = user_id
+        self.user_id = user_id

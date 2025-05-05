@@ -136,9 +136,7 @@ class MagicService:
 
         return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
 
-    def assign_card_to_user(self, username, card_name):
-        user_id = self._user_repository.get_user_id(username)
-        card_id = self._card_repository.get_card_id(card_name)
+    def assign_card_to_user(self, user_id, card_id):
         self._card_repository.add_card_to_user(
             user_id,
             card_id
@@ -169,22 +167,23 @@ class MagicService:
             card_name, set_code
         )
         card_precise_name = card_data["name"]
-        current_username = self.get_current_user().username
+        card = self._card_repository.find_by_card_name(card_precise_name)
 
-        if self._card_repository.find_by_card_name(card_precise_name):
-            if self._card_repository.user_has_card(current_username, card_precise_name):
+        if card:
+            card_id = card.card_id
+            if self._card_repository.user_has_card(self._user.user_id, card_id):
                 raise CardExistsError(
                     f"Card '{card_precise_name}' is already in collection"
                 )
         else:
             card = Card.from_scryfall_json(card_data)
-            self._card_repository.create(card)
+            card_id = self._card_repository.create(card)
             self._card_repository.save_card_image(
                 json.loads(card.image_uris)["small"],
                 card.name
             )
 
-        self.assign_card_to_user(current_username, card_precise_name)
+        self.assign_card_to_user(self._user.user_id, card_id)
 
     def logout(self):
         """Logout current user."""

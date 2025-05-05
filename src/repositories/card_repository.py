@@ -115,7 +115,7 @@ class CardRepository:
             card:
                 Card -object
         Returns:
-            Card -object
+            Id (primary key) of the card.
         Raises:
             DatabaseCreateError:
         """
@@ -162,35 +162,7 @@ class CardRepository:
 
         self._connection.commit()
 
-        return card
-
-    def get_card_id(self, card_name):
-        """Returns cards database id.
-
-        Args:
-            card_name (str):
-        Returns:
-            The card id or None if not found.
-        Raises:
-            DatabaseError:
-        """
-
-        cursor = self._connection.cursor()
-
-        try:
-            cursor.execute(
-                "SELECT id FROM Cards WHERE name = ?",
-                (card_name,)
-            )
-        except DatabaseError as e:
-            print("Database error in Card repository 'get_card_id':", e)
-
-        row = cursor.fetchone()
-
-        if row:
-            return row[0]
-
-        return None
+        return cursor.lastrowid
 
     def find_by_card_name(self, card_name):
         """Returns a specific card.
@@ -257,13 +229,13 @@ class CardRepository:
 
         return None
 
-    def user_has_card(self, username, card_name):
+    def user_has_card(self, user_id, card_id):
         """Returns true of false based on whether current
         user already has the card in collection.
 
         Args:
-            username (str):
-            card_name (str):
+            user_id (int): Database id (primary key) for user.
+            card_id (int): Database id (primary key) for card.
         Returns:
             True or false.
         Raises:
@@ -274,12 +246,10 @@ class CardRepository:
 
         try:
             cursor.execute(
-                """SELECT uc.card_id
-                FROM Users u
-                LEFT JOIN UserCards uc ON u.id = uc.user_id
-                LEFT JOIN Cards c ON c.id = uc.card_id
-                WHERE u.username = ? AND c.name = ?""",
-                (username, card_name)
+                """SELECT COUNT(*)
+                FROM UserCards
+                WHERE user_id = ? AND card_id = ?""",
+                (user_id, card_id)
             )
         except DatabaseError as e:
             raise DatabaseFindError(
@@ -288,7 +258,7 @@ class CardRepository:
 
         row = cursor.fetchone()
 
-        if row:
+        if row[0] > 0:
             return True
 
         return False

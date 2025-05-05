@@ -18,7 +18,7 @@ class TestCardRepository(unittest.TestCase):
         initialize_database()
 
         self.fake_card = test_utils.create_fake_magic_card()
-        card_repository.create(self.fake_card)
+        self.card_id = card_repository.create(self.fake_card)
 
     @patch("repositories.card_repository.requests.get")
     def test_fetch_card_by_name_and_set_with_valid_parameters(self, mock_get):
@@ -65,9 +65,7 @@ class TestCardRepository(unittest.TestCase):
             card_repository.fetch_all_sets()
 
     def test_create_card(self):
-        card = card_repository.create(self.fake_card)
-
-        self.assertEqual(self.fake_card.name, card.name)
+        self.assertEqual(self.card_id, 1)
 
     def test_find_by_card_name(self):
         card = card_repository.find_by_card_name("Test_Dragon")
