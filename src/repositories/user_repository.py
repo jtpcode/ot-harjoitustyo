@@ -3,6 +3,18 @@ from utils.database.database_connection import get_database_connection
 from entities.user import User
 
 
+class DatabaseFindAllError(Exception):
+    pass
+
+
+class DatabaseFindByUsernameError(Exception):
+    pass
+
+
+class DatabaseCreateError(Exception):
+    pass
+
+
 class UserRepository:
     """Class responsible for user database actions.
 
@@ -35,11 +47,16 @@ class UserRepository:
         try:
             cursor.execute("SELECT * FROM Users")
         except DatabaseError as e:
-            print("Database error in User repository 'find_all':", e)
+            raise DatabaseFindAllError(
+                "Database error in User repository 'find_all'"
+            ) from e
 
         rows = cursor.fetchall()
 
-        return [User(row[1], row[2], row[0]) for row in rows]
+        if rows:
+            return [User(row[1], row[2], row[0]) for row in rows]
+
+        return None
 
     def find_by_username(self, username):
         """Returns a specific user.
@@ -60,7 +77,9 @@ class UserRepository:
                 (username,)
             )
         except DatabaseError as e:
-            print("Database error in User repository 'find_by_username':", e)
+            raise DatabaseFindByUsernameError(
+                "Database error in User repository 'find_by_username'"
+            ) from e
 
         row = cursor.fetchone()
 
@@ -89,7 +108,9 @@ class UserRepository:
                 (user.username, user.password)
             )
         except DatabaseError as e:
-            print("Database error in User repository 'create':", e)
+            raise DatabaseCreateError(
+                "Database error in User repository 'create'"
+            ) from e
 
         self._connection.commit()
 

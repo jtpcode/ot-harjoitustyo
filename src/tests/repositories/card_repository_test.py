@@ -8,8 +8,11 @@ from repositories.card_repository import (
     card_repository,
     CardNotFoundError,
     SetsNotFoundError,
+    DatabaseCreateError,
     CardImageNotFoundError
 )
+from repositories.user_repository import user_repository
+from entities.user import User
 
 
 class TestCardRepository(unittest.TestCase):
@@ -17,8 +20,23 @@ class TestCardRepository(unittest.TestCase):
         self.mock_response = Mock()
         initialize_database()
 
+        self.fake_card = None
+        self.card_id = None
+        self.user_alfa = None
+        self.user_id = None
+
+    def create_fake_card_and_user_and_assign(self):
         self.fake_card = test_utils.create_fake_magic_card()
         self.card_id = card_repository.create(self.fake_card)
+
+        self.user_alfa = User('alfa', '1234alfa5678')
+        self.user_id = user_repository.create(self.user_alfa)
+
+        result = card_repository.add_card_to_user(
+            self.user_id, self.card_id
+        )
+
+        return result
 
     @patch("repositories.card_repository.requests.get")
     def test_fetch_card_by_name_and_set_with_valid_parameters(self, mock_get):
@@ -65,12 +83,52 @@ class TestCardRepository(unittest.TestCase):
             card_repository.fetch_all_sets()
 
     def test_create_card(self):
+        self.create_fake_card_and_user_and_assign()
+
         self.assertEqual(self.card_id, 1)
 
     def test_find_card_by_name_and_set(self):
+        self.create_fake_card_and_user_and_assign()
         card = card_repository.find_card_by_name_and_set("Test_Dragon", "TST")
 
         self.assertEqual(card.card_id, self.card_id)
+
+    def test_add_card_to_user_success(self):
+        result = self.create_fake_card_and_user_and_assign()
+
+        self.assertEqual(result, True)
+
+    def test_add_card_to_user_fail(self):
+        with self.assertRaises(DatabaseCreateError):
+            card_repository.add_card_to_user(
+                "wrong_id", "wrong_id"
+            )
+
+    def test_get_user_card_names_success(self):
+        self.create_fake_card_and_user_and_assign()
+        result = card_repository.get_user_card_names(self.user_id)
+
+        self.assertEqual(result[0], "Test_Dragon")
+
+    def test_get_user_card_names_returns_none(self):
+        result = card_repository.get_user_card_names(-1)
+
+        self.assertEqual(result, None)
+
+    def test_user_has_card_success(self):
+        self.create_fake_card_and_user_and_assign()
+        result = card_repository.user_has_card(
+            self.user_id, self.card_id
+        )
+
+        self.assertEqual(result, True)
+
+    def test_user_has_card_returns_false(self):
+        result = card_repository.user_has_card(
+            -1, -2
+        )
+
+        self.assertEqual(result, False)
 
     @patch("repositories.card_repository.requests.get")
     @patch("repositories.card_repository.open", new_callable=mock_open)

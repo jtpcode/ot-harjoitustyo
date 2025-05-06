@@ -196,11 +196,42 @@ class CardRepository:
 
         return None
 
-    def get_user_card_names(self, username):
+    def add_card_to_user(self, user_id, card_id):
+        """Add a new card into database for current user.
+
+        Args:
+            user_id (int):
+                Database id (primary key) for user.
+            card_id (int):
+                Database id (primary key) for card.
+        Returns:
+            True if success.
+        Raises:
+            DatabaseCreateError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute("""
+                INSERT INTO UserCards (user_id, card_id)
+                VALUES (?, ?)""", (user_id, card_id)
+                           )
+        except DatabaseError as e:
+            raise DatabaseCreateError(
+                "Saving card for current user in database failed."
+            ) from e
+
+        self._connection.commit()
+
+        return True
+
+    def get_user_card_names(self, user_id):
         """Gets names of the cards owned by the user.
 
         Args:
-            username (str):
+            user_id (int):
+                Database id (primary key) for user.
         Returns:
             List of card names owned by the user,
             None if not found.
@@ -213,11 +244,10 @@ class CardRepository:
         try:
             cursor.execute(
                 """SELECT c.name
-                FROM Users u
-                LEFT JOIN UserCards uc ON u.id = uc.user_id
-                LEFT JOIN Cards c ON c.id = uc.card_id
-                WHERE u.username = ?""",
-                (username,)
+                FROM Cards c
+                LEFT JOIN UserCards uc ON c.id = uc.card_id
+                WHERE uc.user_id = ?""",
+                (user_id,)
             )
         except DatabaseError as e:
             raise DatabaseFindError(
@@ -264,34 +294,6 @@ class CardRepository:
             return True
 
         return False
-
-    def add_card_to_user(self, user_id, card_id):
-        """Add a new card into database for current user.
-
-        Args:
-            username (str):
-            card_name (str):
-        Returns:
-            True if success.
-        Raises:
-            DatabaseCreateError:
-        """
-
-        cursor = self._connection.cursor()
-
-        try:
-            cursor.execute("""
-                INSERT INTO UserCards (user_id, card_id)
-                VALUES (?, ?)""", (user_id, card_id)
-                           )
-        except DatabaseError as e:
-            raise DatabaseCreateError(
-                "Saving card for current user in database failed."
-            ) from e
-
-        self._connection.commit()
-
-        return True
 
     def save_card_image(self, image_uri, card_name, save_dir="images"):
         """Saves card image into /images -folder

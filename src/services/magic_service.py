@@ -131,7 +131,7 @@ class MagicService:
 
         return user
 
-    def get_user_card_image_filenames(self, username):
+    def get_user_card_image_filenames(self, user_id):
         """Gets the card image filenames of the current user.
 
         Args:
@@ -141,7 +141,7 @@ class MagicService:
             List: List of image filenames for users cards.
         """
 
-        card_names = self._card_repository.get_user_card_names(username)
+        card_names = self._card_repository.get_user_card_names(user_id)
 
         return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
 

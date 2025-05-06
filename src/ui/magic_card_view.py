@@ -95,7 +95,7 @@ class CardListView:
 
         self._image_labels = []
         image_filenames = magic_service.get_user_card_image_filenames(
-            self._user.username
+            self._user.user_id
         )
         for filename in sorted(image_filenames):
             if filename.lower().endswith((".png", ".jpg", ".jpeg")):
