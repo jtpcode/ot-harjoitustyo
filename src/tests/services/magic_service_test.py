@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import Mock, patch
-import os
 from utils.database.initialize_database import initialize_database
 from utils import test_utils
 from repositories.user_repository import user_repository
@@ -22,17 +21,28 @@ class TestMagicService(unittest.TestCase):
     def setUp(self):
         initialize_database()
         self.user_alfa = User('alfa', '1234alfa5678')
-        user_repository.create(self.user_alfa)
+        self.user_id = user_repository.create(self.user_alfa)
 
         self.fake_card = test_utils.create_fake_magic_card()
-        card_repository.create(self.fake_card)
+        self.card_id = card_repository.create(self.fake_card)
 
         self.mock_response = Mock()
         self.user_repository_mock = Mock()
         self.card_repository_mock = Mock()
         self.magic_service = MagicService(
             user_repository=self.user_repository_mock,
-            card_repository=self.card_repository_mock)
+            card_repository=self.card_repository_mock
+        )
+
+    def login_user(self):
+        self.user_repository_mock.find_by_username.return_value = self.user_alfa
+
+        user = self.magic_service.login(
+            self.user_alfa.username,
+            self.user_alfa.password
+        )
+
+        return user
 
     def test_create_user_with_non_existing_username_and_valid_password(self):
         self.user_repository_mock.find_by_username.return_value = None
@@ -73,12 +83,7 @@ class TestMagicService(unittest.TestCase):
         self.assertEqual(current_user, logged_user)
 
     def test_login_with_valid_credentials(self):
-        self.user_repository_mock.find_by_username.return_value = self.user_alfa
-
-        user = self.magic_service.login(
-            self.user_alfa.username,
-            self.user_alfa.password
-        )
+        user = self.login_user()
 
         self.assertEqual(user.username, self.user_alfa.username)
 
@@ -98,28 +103,39 @@ class TestMagicService(unittest.TestCase):
             lambda: self.magic_service.login('alfa', 'invalid_password')
         )
 
+    def test_get_image_filenames_success(self):
+        self.card_repository_mock.get_user_card_names.return_value = [
+            "Test Card"
+        ]
+        filename = self.magic_service.get_user_card_image_filenames("alfa")
+
+        self.assertEqual(filename[0], "test_card.png")
+
     @patch("services.magic_service.Card.from_scryfall_json")
-    def test_fetch_card_success(self, mock_from_scryfall_json):
+    @patch.object(MagicService, "_assign_card_to_user")
+    def test_fetch_card_success(self, mock_assign_card, mock_from_scryfall_json):
+        self.login_user()
+
         self.card_repository_mock.fetch_card_by_name_and_set.return_value = {
             "name": "Fake Card"
         }
         self.card_repository_mock.find_card_by_name_and_set.return_value = None
+        self.card_repository_mock.create.return_value = 1
+        self.card_repository_mock.save_card_image.return_value = "path"
         mock_from_scryfall_json.return_value = self.fake_card
 
-        expected_image_path = os.path.join("images", "fake_card.png")
-        self.card_repository_mock.save_card_image.return_value = expected_image_path
+        self.magic_service.fetch_card("Fake Card", "FAKE_SET")
 
-        image_path = self.magic_service.fetch_card(
-            "Fake Card", "FAKE_SET_CODE"
-        )
-
-        self.assertEqual(expected_image_path, image_path)
+        mock_assign_card.assert_called_once_with(self.user_alfa.user_id, 1)
 
     def test_fetch_card_fails_on_card_exists(self):
+        self.login_user()
+
         self.card_repository_mock.fetch_card_by_name_and_set.return_value = {
             "name": "Fake Card"
         }
-        self.card_repository_mock.find_card_by_name_and_set.return_value = "Fake Card"
+        self.card_repository_mock.find_card_by_name_and_set.return_value = self.fake_card
+        self.card_repository_mock.user_has_card.return_value = True
 
         self.assertRaises(
             CardExistsError,

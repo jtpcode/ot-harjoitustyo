@@ -42,7 +42,8 @@ def create_fake_magic_card():
             "usd_foil": "1.49",
             "eur": "0.89",
             "eur_foil": "1.29"
-        })
+        }),
+        card_id=1
     )
 
     return fake_card

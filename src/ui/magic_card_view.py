@@ -94,7 +94,7 @@ class CardListView:
         """Loads card images into memory as thumbnails."""
 
         self._image_labels = []
-        image_filenames = magic_service.get_user_card_filenames(
+        image_filenames = magic_service.get_user_card_image_filenames(
             self._user.username
         )
         for filename in sorted(image_filenames):

@@ -131,12 +131,28 @@ class MagicService:
 
         return user
 
-    def get_user_card_filenames(self, username):
+    def get_user_card_image_filenames(self, username):
+        """Gets the card image filenames of the current user.
+
+        Args:
+            username (str):
+
+        Returns:
+            List: List of image filenames for users cards.
+        """
+
         card_names = self._card_repository.get_user_card_names(username)
 
         return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
 
     def _assign_card_to_user(self, user_id, card_id):
+        """Assigns card to current user in database.
+
+        Args:
+            user_id (int): User database id (primary key)
+            card_id (int): Card database id (primary key)
+        """
+
         self._card_repository.add_card_to_user(
             user_id,
             card_id
@@ -149,18 +165,15 @@ class MagicService:
         commas and apostrophies (ie. hunters talent = Hunter's Talent). 
 
         Then checks if the card already exists in local database and if so,
-        does the current user have it already. If the card is not in the
-        database, it is saved there.
+        checks if the current user has it already. If the card is not in the
+        database. Lastly the card is saved and assigned to current user.
 
         Args:
             card_name (str):
             set_code (str):
-        Returns:
-            Path to the card image.
         Raises:
             CardExistsError:
                 Card already exists in database.
-
         """
 
         card_data = self._card_repository.fetch_card_by_name_and_set(
