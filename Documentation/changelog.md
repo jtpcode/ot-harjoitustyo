@@ -44,7 +44,7 @@
 - Card view dynamic update after adding a new card
 - Card view react correctly to window resize
 - Only show cards owned by current user
-- CardRepository tested for "save_card_image"
-- MagicService tested for "get_current_user", "fetch_card"
-- Add notifications for user when adding new cards
+- CardRepository tested for "save_card_image", "add_card_to_user", "get_user_card_names", "user_has_card"
+- MagicService tested for "get_current_user", "fetch_card", "get_image_filenames"
+- Add more notifications (errors etc.) for user when adding new cards
 - 

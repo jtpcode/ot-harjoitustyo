@@ -23,5 +23,7 @@
 | 1.5. | 6   | New tests for CardRepository and MagicService |
 | 2.5. | 5   | Add notifications for user when adding new cards, other tweaks |
 | 3.5. | 6   | Only show cards owned by current user, change database accordingly |
+| 5.5. | 3   | Improve error/card handling |
+| 6.5. | 5   | Add tests for MagicService, Card/UserRepository |
 
-**Total hours: 85**
+**Total hours: 93**

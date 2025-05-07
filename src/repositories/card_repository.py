@@ -4,6 +4,7 @@ import os
 import requests
 from entities.card import Card
 from utils.database.database_connection import get_database_connection
+from utils.card_utils import card_names_to_png_filenames
 from config import USER_AGENT
 
 
@@ -296,7 +297,11 @@ class CardRepository:
         return False
 
     def save_card_image(self, image_uri, card_name, save_dir="images"):
-        """Saves card image into /images -folder
+        """Saves card image into /images -folder. There are FOUR special
+        layouts of Magic the Gathering cards: 'split', 'flip', 'transform' and 'modal_dfc'.
+        They require special handling in filenames and image fetching.
+        All of them have " // " in the 'name'-field, which is here replaced
+        with "_slash_" using 'card_names_to_png_filenames()' method.
 
         Args:
             image_uri (str): Uri for downloading the card image.
@@ -311,7 +316,7 @@ class CardRepository:
         # Generated code begins
         os.makedirs(save_dir, exist_ok=True)
 
-        filename = f"{card_name.lower().replace(' ', '_')}.png"
+        filename = card_names_to_png_filenames(card_name)
         image_path = os.path.join(save_dir, filename)
 
         try:

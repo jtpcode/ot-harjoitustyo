@@ -7,6 +7,7 @@ from repositories.card_repository import (
 )
 from entities.user import User
 from entities.card import Card
+from utils.card_utils import card_names_to_png_filenames
 
 
 class InvalidUsernameError(Exception):
@@ -143,7 +144,7 @@ class MagicService:
 
         card_names = self._card_repository.get_user_card_names(user_id)
 
-        return [f"{name.lower().replace(' ', '_')}.png" for name in card_names]
+        return [card_names_to_png_filenames(name) for name in card_names]
 
     def _assign_card_to_user(self, user_id, card_id):
         """Assigns card to current user in database.
@@ -167,6 +168,9 @@ class MagicService:
         Then checks if the card already exists in local database and if so,
         checks if the current user has it already. If the card is not in the
         database. Lastly the card is saved and assigned to current user.
+
+        NOTE: For 'transform' and 'modal_dfc' card layouts the card images are
+        located in card_faces[image_uris].
 
         Args:
             card_name (str):
@@ -195,8 +199,13 @@ class MagicService:
         else:
             card = Card.from_scryfall_json(card_data)
             card_id = self._card_repository.create(card)
+            # TODO: images uris for transform and modal_dfc
+            image_uris = card.image_uris
+            if not image_uris:
+                first_face = json.loads(card.card_faces)[0]
+                image_uris = first_face["image_uris"]
             self._card_repository.save_card_image(
-                json.loads(card.image_uris)["small"],
+                image_uris["small"],
                 card.name
             )
 
