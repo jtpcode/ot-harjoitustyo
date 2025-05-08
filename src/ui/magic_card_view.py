@@ -2,12 +2,17 @@ import os
 from tkinter import ttk, Canvas, constants, StringVar, messagebox
 from ttkwidgets.autocomplete import AutocompleteCombobox
 from PIL import Image, ImageTk
-from services.magic_service import magic_service, CardExistsError
+from services.magic_service import (
+    magic_service,
+    CardExistsError,
+    CardNotFoundError
+)
 from repositories.card_repository import (
     card_repository,
-    CardNotFoundError,
+    IncorrectNameOrSetError,
     SetsNotFoundError,
     DatabaseCreateError,
+    DatabaseDeleteError,
     DatabaseFindError,
     CardImageNotFoundError,
     CardImageWriteError
@@ -194,37 +199,81 @@ class MagicCardView:
         magic_service.logout()
         self._show_login_view()
 
+    def _get_card_name_and_set(self):
+        set_selection = self._selected_set.get()
+        if self._card_name_entry.get() == "" or set_selection not in self._all_sets:
+            return False
+        return self._card_name_entry.get(), self._all_sets[set_selection]
+
     def _submit_handler(self):
         """Fetch and save new card data into database
         and save card image on disk."""
 
-        set_selection = self._selected_set.get()
-        if self._card_name_entry.get() == "" or set_selection not in self._all_sets:
+        card_and_set = self._get_card_name_and_set()
+        if not card_and_set:
             return
 
-        card_name = self._card_name_entry.get()
-        set_code = self._all_sets[set_selection]
+        card_name, set_code = card_and_set
 
         try:
             magic_service.fetch_card(card_name, set_code)
-            self._show_message("Card added to collection")
+            self._initialize_card_list()
             self._card_name_entry.delete(0, 'end')
             self._card_name_entry.focus_set()
-            self._initialize_card_list()
+            self._message_label.configure(foreground="green")
+            self._show_message("Card added to collection")
         except (
             CardExistsError,
-            CardNotFoundError,
+            IncorrectNameOrSetError
+        ) as e:
+            messagebox.showinfo("Info", e)
+        except (
             DatabaseCreateError,
             DatabaseFindError,
             CardImageNotFoundError,
             CardImageWriteError
         ) as e:
-            messagebox.showinfo("Info", e)
+            messagebox.showerror("Error", e)
+
+    def _card_delete_handler(self):
+        """Deletes card from current user, but not from database.
+        Deletion is based on card name and set."""
+
+        card_and_set = self._get_card_name_and_set()
+        if not card_and_set:
+            return
+
+        card_name, set_code = card_and_set
+        response = messagebox.askyesno(
+            "Confirmation",
+            "Are you sure you want to remove the card?"
+        )
+
+        if response:
+            try:
+                magic_service.delete_usercard(card_name, set_code)
+                self._initialize_card_list()
+                self._card_name_entry.delete(0, 'end')
+                self._card_name_entry.focus_set()
+                self._message_label.configure(foreground="red")
+                self._show_message("Card removed from collection")
+            except (
+                CardNotFoundError,
+                IncorrectNameOrSetError
+            ) as e:
+                messagebox.showinfo("Info", e)
+            except (
+                DatabaseFindError,
+                DatabaseDeleteError
+            ) as e:
+                messagebox.showerror("Error", e)
+        else:
+            return
 
     def _show_message(self, message):
         self._message_variable.set(message)
         self._message_label.grid()
-        self._message_label.after(3000, self._hide_message)
+        self._message_label.after(4000, self._hide_message)
 
     def _hide_message(self):
         self._show_message("")
@@ -257,7 +306,7 @@ class MagicCardView:
             sticky=constants.NW
         )
 
-    def initialize_card_search(self, center_frame):
+    def initialize_card_operations(self, center_frame):
         card_name_label = ttk.Label(master=center_frame, text="Card name : ")
         select_set_label = ttk.Label(master=center_frame, text="Set name : ")
         self._card_name_entry = ttk.Entry(master=center_frame, width=30)
@@ -272,6 +321,11 @@ class MagicCardView:
             master=center_frame,
             text="Submit",
             command=self._submit_handler
+        )
+        delete_button = ttk.Button(
+            master=center_frame,
+            text="Delete",
+            command=self._card_delete_handler
         )
         self._message_variable = StringVar(center_frame)
 
@@ -304,12 +358,17 @@ class MagicCardView:
             padx=10,
             pady=(10, 5)
         )
+        delete_button.grid(
+            row=1,
+            column=3,
+            padx=10,
+            pady=(10, 5)
+        )
 
         # Notification of successful card addition
         self._message_label = ttk.Label(
             master=center_frame,
-            textvariable=self._message_variable,
-            foreground="green"
+            textvariable=self._message_variable
         )
         self._message_label.grid(
             row=2,
@@ -380,6 +439,6 @@ class MagicCardView:
         )
 
         self.initialize_label(top_frame)
-        self.initialize_card_search(center_frame)
+        self.initialize_card_operations(center_frame)
         self.initialize_logout(top_frame)
         self._initialize_card_list()

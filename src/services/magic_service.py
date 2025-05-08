@@ -33,6 +33,10 @@ class CardExistsError(Exception):
     pass
 
 
+class CardNotFoundError(Exception):
+    pass
+
+
 class MagicService:
     """Class responsible for 'Magic archive' application logic.
 
@@ -160,6 +164,30 @@ class MagicService:
             card_id
         )
 
+    def _get_card(self, card_name, set_code):
+        """Get card data from api.scryfall.com to get precise name
+        of the card. Then check if card exists in database already.
+
+        Args:
+            card_name (card_name):
+            set_code (set_code):
+
+        Returns:
+            Card data in dict format and a Card -object if in database,
+            else None.
+        """
+        card_data = self._card_repository.fetch_card_by_name_and_set(
+            card_name,
+            set_code
+        )
+        card_precise_name = card_data["name"]
+        card = self._card_repository.find_card_by_name_and_set(
+            card_precise_name,
+            set_code
+        )
+
+        return card_data, card
+
     def fetch_card(self, card_name, set_code):
         """Fetches a new Magic card based on card name and set code.
         First fetches the card data from api.scryfall.com, because the api
@@ -182,21 +210,13 @@ class MagicService:
                 Card already exists in database.
         """
 
-        card_data = self._card_repository.fetch_card_by_name_and_set(
-            card_name,
-            set_code
-        )
-        card_precise_name = card_data["name"]
-        card = self._card_repository.find_card_by_name_and_set(
-            card_precise_name,
-            set_code
-        )
+        card_data, card = self._get_card(card_name, set_code)
 
         if card:
             card_id = card.card_id
             if self._card_repository.user_has_card(self._user.user_id, card_id):
                 raise CardExistsError(
-                    f"Card '{card_precise_name}' is already in collection"
+                    f"Card '{card.name}' is already in collection"
                 )
         else:
             card = Card.from_scryfall_json(card_data)
@@ -212,6 +232,30 @@ class MagicService:
             )
 
         self._assign_card_to_user(self._user.user_id, card_id)
+
+    def delete_usercard(self, card_name, set_code):
+        """Deletes card from current user, but not from database.
+        Deletion is based on card name and set.
+
+        Args:
+            card_name (str):
+            set_code (str):
+        """
+
+        card_data, card = self._get_card(card_name, set_code)
+
+        if card and self._card_repository.user_has_card(
+            self._user.user_id,
+            card.card_id
+        ):
+            self._card_repository.delete_card_from_user(
+                card.card_id,
+                self._user.user_id
+            )
+        else:
+            raise CardNotFoundError(
+                f"Card '{card_data["name"]}'not in collection"
+            )
 
     def logout(self):
         """Logout current user."""

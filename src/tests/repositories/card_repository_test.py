@@ -6,7 +6,7 @@ from utils.database.initialize_database import initialize_database
 from utils import test_utils
 from repositories.card_repository import (
     card_repository,
-    CardNotFoundError,
+    IncorrectNameOrSetError,
     SetsNotFoundError,
     DatabaseCreateError,
     CardImageNotFoundError
@@ -57,7 +57,7 @@ class TestCardRepository(unittest.TestCase):
         )
         mock_get.return_value = self.mock_response
 
-        with self.assertRaises(CardNotFoundError):
+        with self.assertRaises(IncorrectNameOrSetError):
             card_repository.fetch_card_by_name_and_set(
                 "Invalid card name", "m10"
             )

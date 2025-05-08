@@ -8,7 +8,7 @@ from utils.card_utils import card_names_to_png_filenames
 from config import USER_AGENT
 
 
-class CardNotFoundError(Exception):
+class IncorrectNameOrSetError(Exception):
     pass
 
 
@@ -17,6 +17,10 @@ class SetsNotFoundError(Exception):
 
 
 class DatabaseCreateError(Exception):
+    pass
+
+
+class DatabaseDeleteError(Exception):
     pass
 
 
@@ -67,7 +71,7 @@ class CardRepository:
         Returns:
             Card data in dict format.
         Raises:
-            CardNotFoundError:
+            IncorrectNameOrSetError:
         """
 
         url = "https://api.scryfall.com/cards/named"
@@ -84,7 +88,7 @@ class CardRepository:
             )
             response.raise_for_status()
         except requests.exceptions.RequestException as e:
-            raise CardNotFoundError(
+            raise IncorrectNameOrSetError(
                 "Incorrect card name or set."
             ) from e
 
@@ -225,6 +229,37 @@ class CardRepository:
         except DatabaseError as e:
             raise DatabaseCreateError(
                 "Saving card for current user in database failed."
+            ) from e
+
+        self._connection.commit()
+
+        return True
+
+    def delete_card_from_user(self, card_id, user_id):
+        """Delete card from table UserCards.
+
+        Args:
+            card_id (int):
+                Database id (primary key) for card.
+            user_id (int):
+                Database id (primary key) for user.
+        Returns:
+            True if success.
+        Raises:
+            DatabaseDeleteError:
+        """
+
+        cursor = self._connection.cursor()
+
+        try:
+            cursor.execute(
+                """DELETE FROM UserCards
+                WHERE card_id = ? AND user_id = ?""",
+                (card_id, user_id)
+            )
+        except DatabaseError as e:
+            raise DatabaseDeleteError(
+                "UserCard deletion from database failed."
             ) from e
 
         self._connection.commit()
