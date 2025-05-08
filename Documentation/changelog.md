@@ -47,4 +47,5 @@
 - CardRepository tested for "save_card_image", "add_card_to_user", "get_user_card_names", "user_has_card"
 - MagicService tested for "get_current_user", "fetch_card", "get_image_filenames"
 - Add more notifications (errors etc.) for user when adding new cards
+- Special cards (ie. double sided and flip cards) handled
 - 

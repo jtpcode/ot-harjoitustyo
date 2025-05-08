@@ -11,7 +11,7 @@ class CardStats:
     colors: list
     color_identity: list
 
-# Generated code begins
+# Partly generated code begins
 
 
 class Card:
@@ -95,10 +95,10 @@ class Card:
         stats = CardStats(
             mana_cost=data.get("mana_cost"),
             cmc=data.get("cmc"),
-            power=data.get("power") if "power" in data else None,
-            toughness=data.get("toughness") if "toughness" in data else None,
-            colors=json.dumps(data.get("colors", [])),
-            color_identity=json.dumps(data.get("color_identity", []))
+            power=data.get("power"),
+            toughness=data.get("toughness"),
+            colors=data.get("colors"),
+            color_identity=data.get("color_identity")
         )
 
         return cls(
@@ -107,21 +107,16 @@ class Card:
             layout=data.get("layout"),
             stats=stats,
             type_line=data.get("type_line"),
-            oracle_text=data.get(
-                "oracle_text") if "oracle_text" in data else None,
-            keywords=json.dumps(data.get("keywords", [])),
-            card_faces=json.dumps(data.get("card_faces")
-                                  ) if "card_faces" in data else None,
-            all_parts=json.dumps(data.get("all_parts")
-                                 ) if "all_parts" in data else None,
-            image_uris=json.dumps(data.get("image_uris")
-                                  ) if "image_uris" in data else None,
+            oracle_text=data.get("oracle_text"),
+            keywords=data.get("keywords"),
+            card_faces=data.get("card_faces"),
+            all_parts=data.get("all_parts"),
+            image_uris=data.get("image_uris"),
             set_code=data.get("set"),
             set_name=data.get("set_name"),
             rarity=data.get("rarity"),
-            flavor_text=data.get(
-                "flavor_text") if "flavor_text" in data else None,
-            prices=json.dumps(data.get("prices")) if "prices" in data else None
+            flavor_text=data.get("flavor_text"),
+            prices=data.get("prices")
         )
 
     @classmethod
@@ -163,4 +158,4 @@ class Card:
             prices=json.loads(data["prices"]),
             card_id=data["id"]
         )
-# Generated code ends
+# Partly generated code ends

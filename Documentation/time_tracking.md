@@ -25,5 +25,6 @@
 | 3.5. | 6   | Only show cards owned by current user, change database accordingly |
 | 5.5. | 3   | Improve error/card handling |
 | 6.5. | 5   | Add tests for MagicService, Card/UserRepository |
+| 7.5. | 4   | Special cards (ie. double sided) handled |
 
-**Total hours: 93**
+**Total hours: 97**

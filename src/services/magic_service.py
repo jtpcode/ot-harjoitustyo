@@ -1,4 +1,3 @@
-import json
 from repositories.user_repository import (
     user_repository as default_user_repository
 )
@@ -144,7 +143,9 @@ class MagicService:
 
         card_names = self._card_repository.get_user_card_names(user_id)
 
-        return [card_names_to_png_filenames(name) for name in card_names]
+        if card_names:
+            return [card_names_to_png_filenames(name) for name in card_names]
+        return []
 
     def _assign_card_to_user(self, user_id, card_id):
         """Assigns card to current user in database.
@@ -203,7 +204,7 @@ class MagicService:
             image_uris = card.image_uris
             if not image_uris:
                 # HACK: For double sided cards we load only one side (face)
-                first_face = json.loads(card.card_faces)[0]
+                first_face = card.card_faces[0]
                 image_uris = first_face["image_uris"]
             self._card_repository.save_card_image(
                 image_uris["small"],
