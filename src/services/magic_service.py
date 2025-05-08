@@ -166,11 +166,12 @@ class MagicService:
         commas and apostrophies (ie. hunters talent = Hunter's Talent). 
 
         Then checks if the card already exists in local database and if so,
-        checks if the current user has it already. If the card is not in the
-        database. Lastly the card is saved and assigned to current user.
+        checks if the current user has it already. Lastly the card is saved
+        if not in database and then assigned to current user.
 
-        NOTE: For 'transform' and 'modal_dfc' card layouts the card images are
-        located in card_faces[image_uris].
+        NOTE: For double sided cards ie. 'transform' and 'modal_dfc' the card
+        image uris are located in card_faces[image_uris], because those cards
+        have info+image on both sides of the card.
 
         Args:
             card_name (str):
@@ -199,9 +200,9 @@ class MagicService:
         else:
             card = Card.from_scryfall_json(card_data)
             card_id = self._card_repository.create(card)
-            # TODO: images uris for transform and modal_dfc
             image_uris = card.image_uris
             if not image_uris:
+                # HACK: For double sided cards we load only one side (face)
                 first_face = json.loads(card.card_faces)[0]
                 image_uris = first_face["image_uris"]
             self._card_repository.save_card_image(

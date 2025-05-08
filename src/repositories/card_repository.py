@@ -28,6 +28,10 @@ class CardImageNotFoundError(Exception):
     pass
 
 
+class CardImageWriteError(Exception):
+    pass
+
+
 class CardRepository:
     """Class responsible for fetching Magic cards from api.scryfall.com
     and storing them into database.
@@ -300,20 +304,20 @@ class CardRepository:
         """Saves card image into /images -folder. There are FOUR special
         layouts of Magic the Gathering cards: 'split', 'flip', 'transform' and 'modal_dfc'.
         They require special handling in filenames and image fetching.
-        All of them have " // " in the 'name'-field, which is here replaced
+        All of them have " // " in the 'name'-field, which is replaced
         with "_slash_" using 'card_names_to_png_filenames()' method.
 
         Args:
             image_uri (str): Uri for downloading the card image.
             card_name (str): Name of the Magic card.
-            save_dir (str): Folder to save images to.
+            save_dir (str): Folder to save the image to.
         Returns:
             str: Image path.
         Raises:
             CardImageNotFoundError:
         """
 
-        # Generated code begins
+        # Partially enerated code begins
         os.makedirs(save_dir, exist_ok=True)
 
         filename = card_names_to_png_filenames(card_name)
@@ -326,9 +330,13 @@ class CardRepository:
                 f.write(response.content)
         except requests.exceptions.RequestException as e:
             raise CardImageNotFoundError("Fetching card image failed.") from e
+        except OSError as e:
+            raise CardImageWriteError(
+                "Writing card image to disk failed."
+            ) from e
 
         return image_path
-        # Generated code ends
+        # Partially generated code ends
 
 
 card_repository = CardRepository(get_database_connection())

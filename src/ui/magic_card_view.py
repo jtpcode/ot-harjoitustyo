@@ -9,7 +9,8 @@ from repositories.card_repository import (
     SetsNotFoundError,
     DatabaseCreateError,
     DatabaseFindError,
-    CardImageNotFoundError
+    CardImageNotFoundError,
+    CardImageWriteError
 )
 from utils.ui_utils import center_window
 
@@ -210,16 +211,15 @@ class MagicCardView:
             self._card_name_entry.delete(0, 'end')
             self._card_name_entry.focus_set()
             self._initialize_card_list()
-        except CardExistsError as e:
+        except (
+            CardExistsError,
+            CardNotFoundError,
+            DatabaseCreateError,
+            DatabaseFindError,
+            CardImageNotFoundError,
+            CardImageWriteError
+        ) as e:
             messagebox.showinfo("Info", e)
-        except CardNotFoundError as e:
-            messagebox.showerror("Error", e)
-        except DatabaseCreateError as e:
-            messagebox.showerror("Error", e)
-        except DatabaseFindError as e:
-            messagebox.showerror("Error", e)
-        except CardImageNotFoundError as e:
-            messagebox.showerror("Error", e)
 
     def _show_message(self, message):
         self._message_variable.set(message)
