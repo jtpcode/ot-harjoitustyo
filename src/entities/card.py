@@ -10,6 +10,8 @@ class CardStats:
     toughness: str
     colors: list
     color_identity: list
+    type_line: str
+    keywords: list
 
 # Partly generated code begins
 
@@ -22,9 +24,7 @@ class Card:
         released_at (str): Release date.
         layout (str): Card layout type.
         stats (CardStats): Card statistics.
-        type_line (str): Type line.
         oracle_text (str): Oracle text.
-        keywords (list): Keywords.
         card_faces (list): Card face data.
         all_parts (list): Related parts/cards.
         image_uris (dict): Image URIs.
@@ -36,8 +36,7 @@ class Card:
         card_id (int): Id (primary key) in database. Defaults to None.
     """
 
-    def __init__(self, name, released_at, layout, stats,
-                 type_line, oracle_text, keywords,
+    def __init__(self, name, released_at, layout, stats, oracle_text,
                  card_faces, all_parts, image_uris,
                  set_code, set_name, rarity, flavor_text,
                  prices, card_id=None):
@@ -48,9 +47,7 @@ class Card:
             released_at (str): Release date.
             layout (str): Card layout type.
             stats (CardStats): Card statistics.
-            type_line (str): Type line.
             oracle_text (str): Oracle text.
-            keywords (list): Keywords.
             card_faces (list): Card face data.
             all_parts (list): Related parts/cards.
             image_uris (dict): Image URIs.
@@ -66,9 +63,7 @@ class Card:
         self.released_at = released_at
         self.layout = layout
         self.stats = stats
-        self.type_line = type_line
         self.oracle_text = oracle_text
-        self.keywords = keywords
         self.card_faces = card_faces
         self.all_parts = all_parts
         self.image_uris = image_uris
@@ -98,7 +93,9 @@ class Card:
             power=data.get("power"),
             toughness=data.get("toughness"),
             colors=data.get("colors"),
-            color_identity=data.get("color_identity")
+            color_identity=data.get("color_identity"),
+            type_line=data.get("type_line"),
+            keywords=data.get("keywords")
         )
 
         return cls(
@@ -106,9 +103,7 @@ class Card:
             released_at=data.get("released_at"),
             layout=data.get("layout"),
             stats=stats,
-            type_line=data.get("type_line"),
             oracle_text=data.get("oracle_text"),
-            keywords=data.get("keywords"),
             card_faces=data.get("card_faces"),
             all_parts=data.get("all_parts"),
             image_uris=data.get("image_uris"),
@@ -121,7 +116,7 @@ class Card:
 
     @classmethod
     def from_database(cls, data):
-        """Creates a new Card -object based on card data in local database.
+        """Creates a new Card -object based on card data from local database.
 
         Args:
             data (sqlite3.Row):
@@ -138,6 +133,8 @@ class Card:
             toughness=data["toughness"],
             colors=json.loads(data["colors"]),
             color_identity=json.loads(data["color_identity"]),
+            type_line=data["type_line"],
+            keywords=json.loads(data["keywords"])
         )
 
         return cls(
@@ -145,9 +142,7 @@ class Card:
             released_at=data["released_at"],
             layout=data["layout"],
             stats=stats,
-            type_line=data["type_line"],
             oracle_text=data["oracle_text"],
-            keywords=json.loads(data["keywords"]),
             card_faces=json.loads(data["card_faces"]),
             all_parts=json.loads(data["all_parts"]),
             image_uris=json.loads(data["image_uris"]),

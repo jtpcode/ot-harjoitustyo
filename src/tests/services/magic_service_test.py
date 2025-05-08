@@ -120,9 +120,8 @@ class TestMagicService(unittest.TestCase):
             "name": "Fake Card"
         }
         self.card_repository_mock.find_card_by_name_and_set.return_value = None
-        self.card_repository_mock.create.return_value = 1
-        self.card_repository_mock.save_card_image.return_value = "path"
         mock_from_scryfall_json.return_value = self.fake_card
+        self.card_repository_mock.create.return_value = 1
 
         self.magic_service.fetch_card("Fake Card", "FAKE_SET")
 
