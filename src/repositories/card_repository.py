@@ -38,7 +38,7 @@ class CardImageWriteError(Exception):
 
 class CardRepository:
     """Class responsible for fetching Magic cards from api.scryfall.com
-    and storing them into database.
+    and storing them into database and images to disk.
 
     Attributes:
         connection:
@@ -95,7 +95,8 @@ class CardRepository:
         return response.json()
 
     def fetch_all_sets(self):
-        """Fetches all available card sets.
+        """Fetches all available card sets from
+        api.scryfall.com
 
         Returns:
             All card sets in dict format.
@@ -118,11 +119,10 @@ class CardRepository:
         return response.json()
 
     def create(self, card):
-        """Save a new card into database
+        """Save a new card into database.
 
         Args:
-            card:
-                Card -object
+            card: Card -object
         Returns:
             Id (primary key) of the card.
         Raises:
@@ -174,7 +174,7 @@ class CardRepository:
         return cursor.lastrowid
 
     def find_card_by_name_and_set(self, card_name, set_code):
-        """Returns a specific card based on name and card set.
+        """Returns a specific card based on name and set code.
 
         Args:
             card_name (str):
@@ -268,7 +268,7 @@ class CardRepository:
 
     def get_user_card_names_and_set_codes(self, user_id):
         """Gets card names and set codes of the cards
-        owned by the user.
+        owned by the current user.
 
         Args:
             user_id (int):
@@ -346,11 +346,10 @@ class CardRepository:
         Args:
             image_uri (str): Uri for downloading the card image.
             card_name (str): Name of the Magic card.
-            save_dir (str): Folder to save the image to.
-        Returns:
-            str: Image path.
+            set_code (str): The code for card set.
         Raises:
             CardImageNotFoundError:
+            CardImageWriteError:
         """
 
         # Partially generated code begins

@@ -37,9 +37,9 @@ class UserRepository:
         """Returns all users.
 
         Returns:
-            A list of User -objects.
+            A list of User -objects or None.
         Raises:
-            DatabaseError:
+            DatabaseFindAllError:
         """
 
         cursor = self._connection.cursor()
@@ -66,7 +66,7 @@ class UserRepository:
         Returns:
             A User -object or None if not found.
         Raises:
-            DatabaseError:
+            DatabaseFindByUsernameError:
         """
 
         cursor = self._connection.cursor()
@@ -95,9 +95,9 @@ class UserRepository:
             user:
                 User -object
         Returns:
-            Id (primary key) of the user.
+            Id (primary key) of the user in database.
         Raises:
-            DatabaseError:
+            DatabaseCreateError:
         """
 
         cursor = self._connection.cursor()

@@ -41,12 +41,12 @@
 - Improved error handling in fetching cards from scryfall.com
 
 ## Week 7
-- Card view dynamic update after adding a new card
+- Card view dynamic update after adding/removing a card
 - Card view react correctly to window resize
 - Only show cards owned by current user
 - CardRepository tested for "save_card_image", "add_card_to_user", "get_user_card_names", "user_has_card", "delete_card_from_user"
 - MagicService tested for "get_current_user", "fetch_card", "get_image_filenames", "delete_usercard"
-- Add more notifications (errors etc.) for user when adding new cards
+- Add more notifications (errors etc.) for user when adding/removing cards
 - Special cards (ie. double sided and flip cards) handled
 - Added "delete card from user" and error handling.
 - Change button: Submit -> Add

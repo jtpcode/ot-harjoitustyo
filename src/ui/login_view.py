@@ -12,9 +12,9 @@ class LoginView:
         show_create_user_view:
             Directs user to "Create new user" view.
         show_magic_card_view:
-            Directs user to "Magic card view" aka Main view.
+            Directs user to "Magic card view".
         user_created (bool):
-            Signals successfull new user creation.
+            Signals successful new user creation.
     """
 
     def __init__(self, root, show_create_user_view, show_magic_card_view, user_created):
@@ -26,9 +26,9 @@ class LoginView:
             show_create_user_view:
                 Directs user to "Create new user" view.
             show_magic_card_view:
-                Directs user to "Magic card view" aka Main view.
+                Directs user to "Magic card view".
             user_created (bool):
-                Signals successfull new user creation.
+                Signals successful new user creation.
         """
 
         self._root = root

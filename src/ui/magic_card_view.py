@@ -284,7 +284,7 @@ class MagicCardView:
         card set 'names' and also for fetching cards with 'code' in _add_handler().
 
         Returns:
-            A dictionary with all available card sets, with key = 'name'
+            A dictionary with all currently available card sets, with key = 'name'
             and value = 'code'.
         """
 
@@ -366,7 +366,7 @@ class MagicCardView:
             pady=(10, 5)
         )
 
-        # Notification of successful card addition
+        # Notification of card addition/removal
         self._message_label = ttk.Label(
             master=center_frame,
             textvariable=self._message_variable

@@ -120,7 +120,7 @@ class Card:
 
         Args:
             data (sqlite3.Row):
-                All card fields in dict-like object.
+                All card fields in dict-like Row -object.
 
         Returns:
                 A new Card -object

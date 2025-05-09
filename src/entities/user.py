@@ -4,8 +4,7 @@ class User:
     Attributes:
         username (str):
         password (str):
-        user_id (int):
-            Id (primary key) in database. Defaults to None.
+        user_id (int): Id (primary key) in database. Defaults to None.
     """
 
     def __init__(self, username, password, user_id=None):
@@ -14,6 +13,7 @@ class User:
         Args:
             username (str):
             password (str):
+            user_id (int): Id (primary key) in database. Defaults to None.
         """
 
         self.username = username

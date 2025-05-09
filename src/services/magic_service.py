@@ -42,10 +42,10 @@ class MagicService:
 
     Attributes:
         user_repository:
-            Repository responsible for user database actions. Defaults to None.
+            Repository responsible for user database actions.
         card_repository:
             Repository responsible for card operations: api.scryfall.com connection
-            and database actions. Defaults to None.
+            and database/disk actions.
     """
 
     def __init__(
@@ -57,10 +57,10 @@ class MagicService:
 
         Args:
             user_repository:
-                Repository responsible for user database actions. Defaults to None.
+                Repository responsible for user database actions.
             card_repository:
                 Repository responsible for card operations: api.scryfall.com connection
-                and database actions. Defaults to None.
+                and database/disk actions.
         """
 
         self._user = None
@@ -77,12 +77,12 @@ class MagicService:
         Returns:
             User -object
         Raises:
-            UsernameExistsError:
-                Username already exist.
             UsernameTooShortError:
                 Username is too short (minimum 3 characters).
             PasswordTooShortError:
                 Password is too short (minimum 12 characters).
+            UsernameExistsError:
+                Username already exist.
         """
 
         if len(username) < 3:
@@ -172,7 +172,7 @@ class MagicService:
 
         Args:
             card_name (card_name):
-            set_code (set_code):
+            set_code (set_code): The code of the card set.
 
         Returns:
             Card data in dict format and a Card -object if in database,
@@ -197,11 +197,11 @@ class MagicService:
         commas and apostrophies (ie. hunters talent = Hunter's Talent). 
 
         Then checks if the card already exists in local database and if so,
-        checks if the current user has it already. Lastly the card is saved
-        if not in database and then assigned to current user.
+        checks if the current user has it already. Lastly the card and its image
+        are saved if not in database and then assigned to current user.
 
         NOTE: For double sided cards ie. 'transform' and 'modal_dfc' the card
-        image uris are located in card_faces[image_uris], because those cards
+        image uris are located in database column 'card_faces', because those cards
         have info+image on both sides of the card.
 
         Args:
@@ -243,6 +243,8 @@ class MagicService:
         Args:
             card_name (str):
             set_code (str):
+        Raises:
+            CardNotFoundError:
         """
 
         card_data, card = self._get_card(card_name, set_code)
