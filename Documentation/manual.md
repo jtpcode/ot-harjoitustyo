@@ -40,12 +40,14 @@ The application will start in login view. Use **Create user** first to acquire c
 
 ## Card view
 
-Here you can see the cards stored in your collection. Same card can be in different card sets as a reprint, so you need to use both the card and set name. You can add new cards by typing the card name and choosing a corresponding card set, then click 'Add'. If you want to remove a card from your collection, type in the name and set of the card, then click 'Delete'. Here are some example cards with corresponding sets for you to try out:
+Here you can see the cards stored in your collection. Same card can be in different card sets as a reprint, so you need to use both the card and set name. You can add new cards by typing the card name and choosing a corresponding card set, then click 'Add'. If you want to remove a card from your collection, type in the name and set of the card, then click 'Delete'.
+
+Here are some example cards with corresponding sets for you to try out:
 
 - Blooming Blast, Bloomburrow
 - Cache Grab, Bloomburrow
 - Hop to It, Bloomburrow
 - Firebolt, Eternal Masters
-- Firebotl, Odyssey
+- Firebolt, Odyssey
 
 ![](./pics/card_view.png)
