@@ -115,12 +115,13 @@ class TestCardRepository(unittest.TestCase):
 
     def test_get_user_card_names_success(self):
         self.create_fake_card_and_user_and_assign()
-        result = card_repository.get_user_card_names(self.user_id)
+        result = card_repository.get_user_card_names_and_set_codes(
+            self.user_id)
 
-        self.assertEqual(result[0], "Test_Dragon")
+        self.assertEqual(result[0][0], "Test_Dragon")
 
     def test_get_user_card_names_returns_none(self):
-        result = card_repository.get_user_card_names(-1)
+        result = card_repository.get_user_card_names_and_set_codes(-1)
 
         self.assertEqual(result, None)
 
@@ -141,30 +142,38 @@ class TestCardRepository(unittest.TestCase):
 
     @patch("repositories.card_repository.requests.get")
     @patch("repositories.card_repository.open", new_callable=mock_open)
-    @patch("repositories.card_repository.os.makedirs")
-    def test_save_card_image_successfully(self, mock_makedirs, mock_open_file, mock_get):
+    def test_save_card_image_successfully(self, mock_open_file, mock_get):
         self.mock_response.status_code = 200
         self.mock_response.content = b"fake_image_data"
         mock_get.return_value = self.mock_response
 
         image_uri = "http://example.com/card.png"
         card_name = "Fake Card"
-        result = card_repository.save_card_image(image_uri, card_name)
-        expected_path = os.path.join("images", "fake_card.png")
+        set_code = "FAKE"
+        dirname = os.path.dirname(__file__)
+        expected_path = os.path.abspath(
+            os.path.join(
+                dirname, "..", "..", "..", "images", "fake_card_FAKE.png"
+            )
+        )
 
-        mock_makedirs.assert_called_once_with("images", exist_ok=True)
+        card_repository.save_card_image(
+            image_uri, card_name, set_code
+        )
+
         mock_open_file.assert_called_once_with(expected_path, "wb")
         mock_open_file().write.assert_called_once_with(b"fake_image_data")
-        self.assertEqual(result, expected_path)
 
     @patch("repositories.card_repository.requests.get")
-    @patch("repositories.card_repository.os.makedirs")
-    def test_save_card_image_requests_error(self, mock_makedirs, mock_get):
+    def test_save_card_image_requests_error(self, mock_get):
         self.mock_response.raise_for_status.side_effect = requests.exceptions.RequestException(
             "404 error"
         )
         mock_get.return_value = self.mock_response
 
-        self.assertLessEqual(mock_makedirs.call_count, 1)
         with self.assertRaises(CardImageNotFoundError):
-            card_repository.save_card_image("http://invalid.url", "Fake Card")
+            card_repository.save_card_image(
+                "http://invalid.url",
+                "Fake Card",
+                "FAKE"
+            )

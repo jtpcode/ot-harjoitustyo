@@ -26,7 +26,7 @@ The application's functionality has been tested with Python version `3.13`. Issu
 1. Install dependencies with the following command:
 
 ```bash
-poetry install
+poetry install --no-root
 ```
 
 2. Initialize application database with:

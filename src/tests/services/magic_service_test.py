@@ -105,12 +105,14 @@ class TestMagicService(unittest.TestCase):
         )
 
     def test_get_image_filenames_success(self):
-        self.card_repository_mock.get_user_card_names.return_value = [
-            "Test Card"
+        self.card_repository_mock.get_user_card_names_and_set_codes.return_value = [
+            ("Test Card", "FAKE")
         ]
-        filename = self.magic_service.get_user_card_image_filenames("alfa")
+        result = self.magic_service.get_user_card_image_filenames(
+            self.user_id
+        )
 
-        self.assertEqual(filename[0], "test_card.png")
+        self.assertEqual(result, ["test_card_FAKE.png"])
 
     @patch("services.magic_service.Card.from_scryfall_json")
     @patch.object(MagicService, "_assign_card_to_user")

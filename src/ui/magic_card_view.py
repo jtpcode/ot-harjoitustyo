@@ -59,7 +59,8 @@ class CardListView:
         self._frame.grid_columnconfigure(0, weight=1)
         self._frame.grid_rowconfigure(0, weight=1)
 
-        self._images_dir = "./images"
+        dirname = os.path.dirname(__file__)
+        self._images_dir = os.path.join(dirname, "..", "..", "images")
         self._thumbnail_size = (100, 140)
 
         canvas = Canvas(master=self._frame)

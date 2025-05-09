@@ -122,3 +122,5 @@ class CreateUserView:
             foreground="red"
         )
         self._error_label.pack(pady=(10, 0))
+
+        self._new_username_entry.focus_set()

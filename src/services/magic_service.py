@@ -6,7 +6,7 @@ from repositories.card_repository import (
 )
 from entities.user import User
 from entities.card import Card
-from utils.card_utils import card_names_to_png_filenames
+from utils.card_utils import card_name_to_png_filename
 
 
 class InvalidUsernameError(Exception):
@@ -139,16 +139,18 @@ class MagicService:
         """Gets the card image filenames of the current user.
 
         Args:
-            username (str):
+            user_id (int): User database id (primary key)
 
         Returns:
             List: List of image filenames for users cards.
         """
 
-        card_names = self._card_repository.get_user_card_names(user_id)
+        results = self._card_repository.get_user_card_names_and_set_codes(
+            user_id
+        )
 
-        if card_names:
-            return [card_names_to_png_filenames(name) for name in card_names]
+        if results:
+            return [card_name_to_png_filename(res[0], res[1]) for res in results]
         return []
 
     def _assign_card_to_user(self, user_id, card_id):
@@ -228,7 +230,8 @@ class MagicService:
                 image_uris = first_face["image_uris"]
             self._card_repository.save_card_image(
                 image_uris["small"],
-                card.name
+                card.name,
+                card.set_code
             )
 
         self._assign_card_to_user(self._user.user_id, card_id)

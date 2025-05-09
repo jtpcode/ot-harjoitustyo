@@ -4,7 +4,7 @@ import os
 import requests
 from entities.card import Card
 from utils.database.database_connection import get_database_connection
-from utils.card_utils import card_names_to_png_filenames
+from utils.card_utils import card_name_to_png_filename
 from config import USER_AGENT
 
 
@@ -266,14 +266,15 @@ class CardRepository:
 
         return True
 
-    def get_user_card_names(self, user_id):
-        """Gets names of the cards owned by the user.
+    def get_user_card_names_and_set_codes(self, user_id):
+        """Gets card names and set codes of the cards
+        owned by the user.
 
         Args:
             user_id (int):
                 Database id (primary key) for user.
         Returns:
-            List of card names owned by the user,
+            List of tuples: (card_name, set_code).
             None if not found.
         Raises:
             DatabaseFindError:
@@ -283,7 +284,7 @@ class CardRepository:
 
         try:
             cursor.execute(
-                """SELECT c.name
+                """SELECT c.name, c.set_code
                 FROM Cards c
                 LEFT JOIN UserCards uc ON c.id = uc.card_id
                 WHERE uc.user_id = ?""",
@@ -297,7 +298,7 @@ class CardRepository:
         rows = cursor.fetchall()
 
         if rows:
-            return [row[0] for row in rows]
+            return rows
 
         return None
 
@@ -335,7 +336,7 @@ class CardRepository:
 
         return False
 
-    def save_card_image(self, image_uri, card_name, save_dir="images"):
+    def save_card_image(self, image_uri, card_name, set_code):
         """Saves card image into /images -folder. There are FOUR special
         layouts of Magic the Gathering cards: 'split', 'flip', 'transform' and 'modal_dfc'.
         They require special handling in filenames and image fetching.
@@ -352,11 +353,13 @@ class CardRepository:
             CardImageNotFoundError:
         """
 
-        # Partially enerated code begins
-        os.makedirs(save_dir, exist_ok=True)
+        # Partially generated code begins
 
-        filename = card_names_to_png_filenames(card_name)
-        image_path = os.path.join(save_dir, filename)
+        filename = card_name_to_png_filename(card_name, set_code)
+        dirname = os.path.dirname(__file__)
+        image_path = os.path.abspath(
+            os.path.join(dirname, "..", "..", "images", filename)
+        )
 
         try:
             response = requests.get(image_uri, timeout=10)
@@ -370,7 +373,6 @@ class CardRepository:
                 "Writing card image to disk failed."
             ) from e
 
-        return image_path
         # Partially generated code ends
 
 
