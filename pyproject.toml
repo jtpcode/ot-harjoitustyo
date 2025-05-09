@@ -1,6 +1,6 @@
 [project]
 name = "ot-harjoitustyo"
-version = "0.4.0"
+version = "0.5.0"
 description = "App for archiving Magic the Gathering cards"
 authors = [
     {name = "jtpcode",email = "152286055+jtpcode@users.noreply.github.com"}
