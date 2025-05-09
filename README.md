@@ -1,5 +1,8 @@
 # Ohjelmistotekniikka, harjoitustyö
 
+[![CI](https://github.com/jtpcode/ot-harjoitustyo/actions/workflows/main.yml/badge.svg)](https://github.com/jtpcode/ot-harjoitustyo/actions/workflows/main.yml)
+[![codecov](https://codecov.io/gh/jtpcode/ot-harjoitustyo/graph/badge.svg?token=YRY6AKKYRG)](https://codecov.io/gh/jtpcode/ot-harjoitustyo)
+
 The application is designed to manage Magic: The Gathering cards. It allows users to maintain a digital archive of their physical cards and perform various searches based on attributes such as card colors or mana costs. Cards are retrieved through the Scryfall.com API. The application supports multiple users, each of whom must register to access the system.
 
 ## Note on Python Version
