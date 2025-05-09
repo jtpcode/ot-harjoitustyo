@@ -13,7 +13,8 @@ from services.magic_service import (
     UsernameExistsError,
     UsernameTooShortError,
     PasswordTooShortError,
-    CardExistsError
+    CardExistsError,
+    CardNotFoundError
 )
 
 
@@ -140,6 +141,41 @@ class TestMagicService(unittest.TestCase):
             CardExistsError,
             lambda: self.magic_service.fetch_card(
                 "Fake Card", "FAKE_SET_CODE"
+            )
+        )
+
+    @patch.object(MagicService, "_get_card")
+    def test_delete_usercard_success(self, mock_get_card):
+        self.login_user()
+
+        mock_get_card.return_value = (
+            {"name": "Fake Card"},
+            self.fake_card
+        )
+        self.card_repository_mock.user_has_card.return_value = True
+
+        self.magic_service.delete_usercard("Fake Card", "FAKE_SET_CODE")
+
+        self.card_repository_mock.delete_card_from_user.assert_called_once_with(
+            self.fake_card.card_id,
+            self.user_alfa.user_id
+        )
+
+    @patch.object(MagicService, "_get_card")
+    def test_delete_usercard_fails_on_card_not_in_collection(self, mock_get_card):
+        self.login_user()
+
+        mock_get_card.return_value = (
+            {"name": "Fake Card"},
+            None
+        )
+        self.card_repository_mock.user_has_card.return_value = False
+
+        self.assertRaises(
+            CardNotFoundError,
+            lambda: self.magic_service.delete_usercard(
+                "Fake Card",
+                "FAKE_SET_CODE"
             )
         )
 

@@ -26,5 +26,6 @@
 | 5.5. | 3   | Improve error/card handling |
 | 6.5. | 5   | Add tests for MagicService, Card/UserRepository |
 | 7.5. | 4   | Special cards (ie. double sided) handled |
+| 8.5. | 5   | Added "delete card from user" and error handling. |
 
-**Total hours: 97**
+**Total hours: 102**

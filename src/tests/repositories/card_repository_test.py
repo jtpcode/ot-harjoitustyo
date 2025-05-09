@@ -104,6 +104,15 @@ class TestCardRepository(unittest.TestCase):
                 "wrong_id", "wrong_id"
             )
 
+    def test_delete_card_from_user_success(self):
+        self.create_fake_card_and_user_and_assign()
+        response = card_repository.delete_card_from_user(
+            self.fake_card.card_id,
+            self.user_alfa.user_id
+        )
+
+        self.assertEqual(response, True)
+
     def test_get_user_card_names_success(self):
         self.create_fake_card_and_user_and_assign()
         result = card_repository.get_user_card_names(self.user_id)
