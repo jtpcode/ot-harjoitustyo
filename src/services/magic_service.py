@@ -254,7 +254,7 @@ class MagicService:
             )
         else:
             raise CardNotFoundError(
-                f"Card '{card_data["name"]}'not in collection"
+                f"Card '{card_data['name']}'not in collection"
             )
 
     def logout(self):
