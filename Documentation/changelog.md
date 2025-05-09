@@ -49,3 +49,4 @@
 - Add more notifications (errors etc.) for user when adding new cards
 - Special cards (ie. double sided and flip cards) handled
 - Added "delete card from user" and error handling.
+- Change button: Submit -> Add

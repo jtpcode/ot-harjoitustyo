@@ -40,6 +40,6 @@ The application will start in login view. Use **Create user** first to acquire c
 
 ## Card view
 
-Here you can see the cards stored in the database. You can add new cards by giving the card name and choosing a corresponding card set, then click submit.
+Here you can see the cards stored in the database. You can add new cards by giving the card name and choosing a corresponding card set, then click add.
 
 ![](./pics/card_view.png)

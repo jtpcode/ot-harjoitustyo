@@ -27,5 +27,6 @@
 | 6.5. | 5   | Add tests for MagicService, Card/UserRepository |
 | 7.5. | 4   | Special cards (ie. double sided) handled |
 | 8.5. | 5   | Added "delete card from user" and error handling. |
+| 9.5. | 5   | Add tests for "delete card from user", CI and Codecov, change Submit -> Add |
 
-**Total hours: 102**
+**Total hours: 107**

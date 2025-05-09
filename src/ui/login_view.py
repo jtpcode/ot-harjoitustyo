@@ -139,3 +139,5 @@ class LoginView:
             command=self._show_create_user_view,
             width=20)
         create_user_button.pack()
+
+        self._username_entry.focus_set()

@@ -205,7 +205,7 @@ class MagicCardView:
             return False
         return self._card_name_entry.get(), self._all_sets[set_selection]
 
-    def _submit_handler(self):
+    def _add_handler(self):
         """Fetch and save new card data into database
         and save card image on disk."""
 
@@ -280,7 +280,7 @@ class MagicCardView:
 
     def initialize_sets(self):
         """Form a dictionary that can be used for populating a dropdown list for
-        card set 'names' and also for fetching cards with 'code' in _submit_handler().
+        card set 'names' and also for fetching cards with 'code' in _add_handler().
 
         Returns:
             A dictionary with all available card sets, with key = 'name'
@@ -317,10 +317,10 @@ class MagicCardView:
             completevalues=sorted(list(self._all_sets)),
             width=30
         )
-        submit_button = ttk.Button(
+        add_button = ttk.Button(
             master=center_frame,
-            text="Submit",
-            command=self._submit_handler
+            text="Add",
+            command=self._add_handler
         )
         delete_button = ttk.Button(
             master=center_frame,
@@ -352,7 +352,7 @@ class MagicCardView:
             pady=(10, 5),
             sticky=constants.W
         )
-        submit_button.grid(
+        add_button.grid(
             row=1,
             column=2,
             padx=10,
