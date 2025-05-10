@@ -181,7 +181,7 @@ class MagicCardView:
         self._message_variable = None
         self._card_list_view = None
 
-        center_window(self._root, 800, 800)
+        center_window(self._root, 900, 800)
         self._initialize()
 
     def pack(self):

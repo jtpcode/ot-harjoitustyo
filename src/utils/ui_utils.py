@@ -1,13 +1,13 @@
-def center_window(root, height, width):
+def center_window(root, width, height):
     """Centers the current view (window) in the middle of the screen.
 
     Args:
         root:
             TKinter -element, which initializes the user interface.
-        height (int):
-            Window height in pixels.
         width (int):
-            Window width in pixels.
+            Window width.
+        height (int):
+            Window height.
     """
 
     x = (root.winfo_screenwidth() // 2) - (width // 2)
