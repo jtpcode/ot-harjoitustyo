@@ -212,6 +212,9 @@ class MagicCardView:
 
         card_and_set = self._get_card_name_and_set()
         if not card_and_set:
+            messagebox.showinfo(
+                "Info", "Check the spelling in the card and set names."
+            )
             return
 
         card_name, set_code = card_and_set
@@ -242,6 +245,9 @@ class MagicCardView:
 
         card_and_set = self._get_card_name_and_set()
         if not card_and_set:
+            messagebox.showinfo(
+                "Info", "Check the spelling in the card and set names."
+            )
             return
 
         card_name, set_code = card_and_set

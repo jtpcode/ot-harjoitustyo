@@ -89,3 +89,4 @@ After user clicks 'Delete' button, MagicService checks whether the card is in us
 ## Known issues in application architecture
 
 - There are FOUR special card-layouts for certain Magic the Gathering cards: 'split', 'flip', 'transform' and 'modal_dfc'. For these cards certain data is not located in the "root" of the Cards -table in the database. For example Creature -cards "power" for double sided cards (tramsform, modal_dfc) is not located in column "power", but instead can be found in column "card_faces" that includes a list with two jsons, one for each side of the card. This must be taken into account when implementing for example search features that include these kind of data fields.
+- Double sided cards: current version of the application only loads the image of the "first" side of a double sided card. All the card info is still saved in the database.
