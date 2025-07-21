@@ -53,7 +53,6 @@ class CardListView:
 
         self._frame.destroy()
 
-    # partially generated code begins
     def _initialize(self):
         self._frame = ttk.Frame(master=self._root)
         self._frame.grid_columnconfigure(0, weight=1)
@@ -145,7 +144,6 @@ class CardListView:
             if col >= max_columns:
                 col = 0
                 row += 1
-    # partially generated code ends
 
 
 class MagicCardView:

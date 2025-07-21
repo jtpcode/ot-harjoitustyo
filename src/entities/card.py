@@ -13,8 +13,6 @@ class CardStats:
     type_line: str
     keywords: list
 
-# Partly generated code begins
-
 
 class Card:
     """Class for a Magic: The Gathering card.
@@ -153,4 +151,3 @@ class Card:
             prices=json.loads(data["prices"]),
             card_id=data["id"]
         )
-# Partly generated code ends

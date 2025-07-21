@@ -132,7 +132,6 @@ class CardRepository:
         cursor = self._connection.cursor()
 
         try:
-            # Generated code begins
             cursor.execute("""
                 INSERT INTO Cards (
                     name, released_at, layout, mana_cost, cmc,
@@ -163,7 +162,6 @@ class CardRepository:
                 json.dumps(card.prices)
             )
             )
-        # Generated code ends
         except DatabaseError as e:
             raise DatabaseCreateError(
                 "Saving card into database failed."
@@ -352,8 +350,6 @@ class CardRepository:
             CardImageWriteError:
         """
 
-        # Partially generated code begins
-
         filename = card_name_to_png_filename(card_name, set_code)
         dirname = os.path.dirname(__file__)
         image_path = os.path.abspath(
@@ -371,8 +367,6 @@ class CardRepository:
             raise CardImageWriteError(
                 "Writing card image to disk failed."
             ) from e
-
-        # Partially generated code ends
 
 
 card_repository = CardRepository(get_database_connection())
