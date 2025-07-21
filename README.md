@@ -16,7 +16,7 @@ The application's functionality has been tested with Python version `3.13`. Issu
 - [Requirements Specification](./Documentation/requirements_specification.md)
 - [Architecture Description](./Documentation/architecture.md)
 - [Changelog](./Documentation/changelog.md)
-- [Test documentation](./Documentation/testing.md)
+- [Testing documentation](./Documentation/testing.md)
 - [Manual](./Documentation/manual.md)
 
 ## Releases

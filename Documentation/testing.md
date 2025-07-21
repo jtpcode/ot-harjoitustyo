@@ -1,6 +1,6 @@
 # Testing Documentation
 
-The application has been tested using both automated unit and integration tests with `unittest`. System-level testing was performed manually.
+The application has been tested using both automated unit and integration tests with `unittest`. System-level testing was performed manually. Currently, the user interface is not  automatically tested.
 
 ## Unit and Integration Testing
 
@@ -35,3 +35,4 @@ All features listed in the [requirements specification](./requirements_specifica
 ## Known Quality Issues
 
 - The application does not provide error messages in UI if SQLite database is not initialized before starting the application.
+- Currently, the user interface is not  automatically tested.
