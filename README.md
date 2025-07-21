@@ -5,6 +5,8 @@
 
 The application is designed to manage Magic: The Gathering cards. It allows users to maintain a digital archive of their physical cards. Cards are retrieved from the Scryfall.com API. The application supports multiple users, each of whom must register to access the system.
 
+![](./Documentation/pics/card_view.png)
+
 ## Note on Python Version
 
 The application's functionality has been tested with Python version `3.13`. Issues may arise, when using older Python versions.
